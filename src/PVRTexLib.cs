@@ -135,7 +135,7 @@ namespace PVRTexLib
         public double rgbChannels;
     }
 
-    public static unsafe class NativeMethod
+    public static unsafe class PVRTexLibNative
     {
         private const string PVRTexLibName = "PVRTexLib";
 

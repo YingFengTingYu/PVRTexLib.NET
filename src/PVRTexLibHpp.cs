@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using static PVRTexLib.NativeMethod;
+using static PVRTexLib.PVRTexLibNative;
 using static PVRTexLib.PVRDefine;
 
 namespace PVRTexLib
