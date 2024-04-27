@@ -1,4 +1,6 @@
 ﻿using PVRTexLib;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Test
 {
@@ -6,11 +8,10 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
             PVRTexture? texture = ReadAndTranscodeImage("D:\\123.jpg");
             if (texture != null)
             {
-                Console.WriteLine(texture.GetTextureBumpMapOrder());
+                Console.WriteLine(texture.GetTextureCubeMapOrder());
                 if (!texture.GenerateMIPMaps(PVRTexLibResizeMode.PVRTLRM_Linear))
                 {
                     texture.Dispose();
@@ -41,6 +42,19 @@ namespace Test
                 return null;
             }
             return texture;
+        }
+
+        static unsafe void Transcode(void* inData, void* outData, uint width, uint height, ulong inFormat, ulong outFormat, PVRTexLibCompressorQuality quality, bool dither)
+        {
+            using PVRTextureHeader header = new PVRTextureHeader(inFormat, width, height, 1, 1, 1, 1, PVRTexLibColourSpace.PVRTLCS_sRGB, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, false);
+            using PVRTexture tex = new PVRTexture(header, inData);
+            if (tex.GetTextureDataSize() != 0)
+            {
+                if (tex.Transcode(outFormat, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_sRGB, quality, dither))
+                {
+                    NativeMemory.Copy(tex.GetTextureDataPointer(0), outData, (nuint)tex.GetTextureDataSize(0));
+                }
+            }
         }
     }
 }
