@@ -11,7 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PVRTexLib.NET\PVRTexLib.NET.csproj" />
     <ProjectReference Include="..\src\PVRTexLib.NET.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using static PVRTexLib.PVRDefine;
 using static PVRTexLib.NativeMethod;
+using static PVRTexLib.PVRDefine;
 
 namespace PVRTexLib
 {

@@ -3,6 +3,54 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>PVRTexLib.NET</PackageId>
+    <Title>PVRTexLib .NET</Title>
+    <Company>$(AssemblyName)</Company>
+    <Authors>YingFengTingYu</Authors>
+    <Description>A PVRTexLib wrapper translated from PowerVR_Tools\PVRTexTool\Library\Include</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/YingFengTingYu/PVRTexLib.NET</RepositoryUrl>
+    <PackageTags>pvr;pvrtc;astc;etc;texture;compress;dxt;pvrtexlib</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<Content Include="native\windows\x64\PVRTexLib.dll">
+		<PackagePath>runtimes\win-x64\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+	<Content Include="native\windows\x86\PVRTexLib.dll">
+		<PackagePath>runtimes\win-x86\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+	<Content Include="native\osx\libPVRTexLib.dylib">
+		<PackagePath>runtimes\osx\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+	<Content Include="native\linux\x64\libPVRTexLib.so">
+		<PackagePath>runtimes\linux-x64\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+	<Content Include="native\linux\x86\libPVRTexLib.so">
+		<PackagePath>runtimes\linux-x86\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+	<Content Include="native\linux\arm\libPVRTexLib.so">
+		<PackagePath>runtimes\linux-arm\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+	<Content Include="native\linux\arm64\libPVRTexLib.so">
+		<PackagePath>runtimes\linux-arm64\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+  </ItemGroup>
 
 </Project>
