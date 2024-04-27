@@ -10,6 +10,7 @@ namespace Test
             PVRTexture? texture = ReadAndTranscodeImage("D:\\123.jpg");
             if (texture != null)
             {
+                Console.WriteLine(texture.GetTextureBumpMapOrder());
                 if (!texture.GenerateMIPMaps(PVRTexLibResizeMode.PVRTLRM_Linear))
                 {
                     texture.Dispose();

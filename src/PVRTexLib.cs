@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
 
 namespace PVRTexLib
 {
@@ -247,10 +248,10 @@ namespace PVRTexLib
         public static extern uint PVRTexLib_GetTextureNumArrayMembers(void* header);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureCubeMapOrder", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void PVRTexLib_GetTextureCubeMapOrder(void* header, [MarshalAs(UnmanagedType.LPStr)] out string cubeOrder);
+        public static extern void PVRTexLib_GetTextureCubeMapOrder(void* header, [MarshalAs(UnmanagedType.LPStr)] StringBuilder cubeOrder);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapOrder", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void PVRTexLib_GetTextureBumpMapOrder(void* header, [MarshalAs(UnmanagedType.LPStr)] out string bumpOrder);
+        public static extern void PVRTexLib_GetTextureBumpMapOrder(void* header, [MarshalAs(UnmanagedType.LPStr)] StringBuilder bumpOrder);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTexturePixelFormat", CallingConvention = CallingConvention.Cdecl)]
         public static extern ulong PVRTexLib_GetTexturePixelFormat(void* header);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 using static PVRTexLib.NativeMethod;
 using static PVRTexLib.PVRDefine;
 
@@ -483,8 +484,9 @@ namespace PVRTexLib
         {
             if (m_hTextureHeader != null)
             {
-                PVRTexLib_GetTextureCubeMapOrder(m_hTextureHeader, out string cubeOrder);
-                return cubeOrder;
+                StringBuilder sb = new StringBuilder(8);
+                PVRTexLib_GetTextureCubeMapOrder(m_hTextureHeader, sb);
+                return sb.ToString();
             }
             return null;
         }
@@ -493,9 +495,10 @@ namespace PVRTexLib
         {
             if (m_hTextureHeader != null)
             {
-                PVRTexLib_GetTextureBumpMapOrder(m_hTextureHeader, out string bumpOrderPtr);
+                StringBuilder sb = new StringBuilder(8);
+                PVRTexLib_GetTextureBumpMapOrder(m_hTextureHeader, sb);
+                return sb.ToString();
             }
-
             return null;
         }
 
