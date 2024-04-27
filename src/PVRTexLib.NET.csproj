@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	<Content Include="native\windows\x64\PVRTexLib.dll">
+	<Content Include="native\win-x64\PVRTexLib.dll">
 		<PackagePath>runtimes\win-x64\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
-	<Content Include="native\windows\x86\PVRTexLib.dll">
+	<Content Include="native\win-x86\PVRTexLib.dll">
 		<PackagePath>runtimes\win-x86\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
@@ -35,19 +35,19 @@
 		<PackagePath>runtimes\osx\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
-	<Content Include="native\linux\x64\libPVRTexLib.so">
+	<Content Include="native\linux-x64\libPVRTexLib.so">
 		<PackagePath>runtimes\linux-x64\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
-	<Content Include="native\linux\x86\libPVRTexLib.so">
+	<Content Include="native\linux-x86\libPVRTexLib.so">
 		<PackagePath>runtimes\linux-x86\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
-	<Content Include="native\linux\arm\libPVRTexLib.so">
+	<Content Include="native\linux-arm\libPVRTexLib.so">
 		<PackagePath>runtimes\linux-arm\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
-	<Content Include="native\linux\arm64\libPVRTexLib.so">
+	<Content Include="native\linux-arm64\libPVRTexLib.so">
 		<PackagePath>runtimes\linux-arm64\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
