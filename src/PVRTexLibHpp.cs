@@ -1428,7 +1428,7 @@ namespace PVRTexLib
             PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
             if (m_hTexture != null && texture.m_hTexture != null)
             {
-                bool succeed = PVRTexLib_MeanSquaredError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                bool succeed = PVRTexLib_MeanSquaredError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, &temp);
                 metrics = temp;
                 return succeed;
             }
@@ -1451,7 +1451,7 @@ namespace PVRTexLib
             PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
             if (m_hTexture != null && texture.m_hTexture != null)
             {
-                bool succeed = PVRTexLib_RootMeanSquaredError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                bool succeed = PVRTexLib_RootMeanSquaredError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, &temp);
                 metrics = temp;
                 return succeed;
             }
@@ -1474,7 +1474,7 @@ namespace PVRTexLib
             PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
             if (m_hTexture != null && texture.m_hTexture != null)
             {
-                bool succeed = PVRTexLib_StandardDeviation(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                bool succeed = PVRTexLib_StandardDeviation(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, &temp);
                 metrics = temp;
                 return succeed;
             }
@@ -1497,7 +1497,7 @@ namespace PVRTexLib
             PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
             if (m_hTexture != null && texture.m_hTexture != null)
             {
-                bool succeed = PVRTexLib_PeakSignalToNoiseRatio(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                bool succeed = PVRTexLib_PeakSignalToNoiseRatio(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, &temp);
                 metrics = temp;
                 return succeed;
             }
