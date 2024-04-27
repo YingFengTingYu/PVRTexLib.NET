@@ -9,8 +9,13 @@ namespace PVRTexLib
     public unsafe class PVRTextureHeader : IDisposable
     {
         protected void* m_hTextureHeader;
-        private bool disposedValue;
-
+#if NET6_0_OR_GREATER
+        public static Func<uint, IntPtr> Alloc = bytes => (IntPtr)NativeMemory.Alloc(bytes);
+        public static Action<IntPtr> Free = ptr => NativeMemory.Free((void*)ptr);
+#else
+        public static Func<uint, IntPtr> Alloc = bytes => Marshal.AllocHGlobal((int)bytes);
+        public static Action<IntPtr> Free = ptr => Marshal.FreeHGlobal(ptr);
+#endif
         public void* Header => m_hTextureHeader;
 
         public PVRTextureHeader()
@@ -18,13 +23,11 @@ namespace PVRTexLib
             PVRHeader_CreateParams @params;
             PVRTexLib_SetDefaultTextureHeaderParams(&@params);
             m_hTextureHeader = PVRTexLib_CreateTextureHeader(&@params);
-            disposedValue = false;
         }
 
         public PVRTextureHeader(PVRHeader_CreateParams* @params)
         {
             m_hTextureHeader = PVRTexLib_CreateTextureHeader(@params);
-            disposedValue = false;
         }
 
         public PVRTextureHeader(in PVRHeader_CreateParams @params)
@@ -33,7 +36,6 @@ namespace PVRTexLib
             {
                 m_hTextureHeader = PVRTexLib_CreateTextureHeader(paramsPtr);
             }
-            disposedValue = false;
         }
 
         public PVRTextureHeader(ulong pixelFormat, uint width, uint height, uint depth = 1u, uint numMipMaps = 1u, uint numArrayMembers = 1u, uint numFaces = 1u, PVRTexLibColourSpace colourSpace = PVRTexLibColourSpace.PVRTLCS_sRGB, PVRTexLibVariableType channelType = PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, bool preMultiplied = false)
@@ -50,35 +52,31 @@ namespace PVRTexLib
             @params.channelType = channelType;
             @params.preMultiplied = preMultiplied;
             m_hTextureHeader = PVRTexLib_CreateTextureHeader(&@params);
-            disposedValue = false;
         }
 
         public PVRTextureHeader(bool _)
         {
             m_hTextureHeader = null;
-            disposedValue = false;
         }
 
         public PVRTextureHeader(PVRTextureHeader rhs)
         {
             m_hTextureHeader = PVRTexLib_CopyTextureHeader(rhs.m_hTextureHeader);
-            disposedValue = false;
         }
 
         public PVRTextureHeader(in PVRTextureHeader rhs)
         {
             m_hTextureHeader = rhs.m_hTextureHeader;
             rhs.m_hTextureHeader = null;
-            disposedValue = false;
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            void* hTextureHeader = m_hTextureHeader;
+            if (hTextureHeader != null)
             {
-                PVRTexLib_DestroyTextureHeader(m_hTextureHeader);
+                PVRTexLib_DestroyTextureHeader(hTextureHeader);
                 m_hTextureHeader = null;
-                disposedValue = true;
             }
         }
 
@@ -331,6 +329,20 @@ namespace PVRTexLib
             }
         }
 
+        public (uint minX, uint minY, uint minZ) GetTextureFormatMinDims()
+        {
+            if (m_hTextureHeader != null)
+            {
+                uint aX, aY, aZ;
+                PVRTexLib_GetTextureFormatMinDims(m_hTextureHeader, &aX, &aY, &aZ);
+                return (aX, aY, aZ);
+            }
+            else
+            {
+                return (1U, 1U, 1U);
+            }
+        }
+
         public void GetPixelFormatMinDims(ulong ui64Format, uint* minX, uint* minY, uint* minZ)
         {
             PVRTexLib_GetPixelFormatMinDims(ui64Format, minX, minY, minZ);
@@ -343,6 +355,13 @@ namespace PVRTexLib
             minX = aX;
             minY = aY;
             minZ = aZ;
+        }
+
+        public (uint minX, uint minY, uint minZ) GetPixelFormatMinDims(ulong ui64Format)
+        {
+            uint aX, aY, aZ;
+            PVRTexLib_GetPixelFormatMinDims(ui64Format, &aX, &aY, &aZ);
+            return (aX, aY, aZ);
         }
 
         public uint GetTextureMetaDataSize()
@@ -460,32 +479,24 @@ namespace PVRTexLib
             return 0U;
         }
 
-        public sbyte[] GetTextureCubeMapOrder()
+        public string GetTextureCubeMapOrder()
         {
-            sbyte[] cubeOrder = new sbyte[7];
             if (m_hTextureHeader != null)
             {
-                fixed (sbyte* cubeOrderPtr = &cubeOrder[0])
-                {
-                    PVRTexLib_GetTextureCubeMapOrder(m_hTextureHeader, cubeOrderPtr);
-                }
+                PVRTexLib_GetTextureCubeMapOrder(m_hTextureHeader, out string cubeOrder);
+                return cubeOrder;
             }
-
-            return cubeOrder;
+            return null;
         }
 
-        public sbyte[] GetTextureBumpMapOrder()
+        public string GetTextureBumpMapOrder()
         {
-            sbyte[] bumpOrder = new sbyte[5];
             if (m_hTextureHeader != null)
             {
-                fixed (sbyte* bumpOrderPtr = &bumpOrder[0])
-                {
-                    PVRTexLib_GetTextureBumpMapOrder(m_hTextureHeader, bumpOrderPtr);
-                }
+                PVRTexLib_GetTextureBumpMapOrder(m_hTextureHeader, out string bumpOrderPtr);
             }
 
-            return bumpOrder;
+            return null;
         }
 
         public ulong GetTexturePixelFormat()
@@ -728,17 +739,47 @@ namespace PVRTexLib
             }
         }
 
+        public (uint borderWidth, uint borderHeight, uint borderDepth) GetTextureBorder()
+        {
+            if (m_hTextureHeader != null)
+            {
+                uint w, h, d;
+                PVRTexLib_GetTextureBorder(m_hTextureHeader, &w, &h, &d);
+                return (w, h, d);
+            }
+            else
+            {
+                return (0U, 0U, 0U);
+            }
+        }
+
         public bool GetMetaDataBlock(uint key, PVRTexLib_MetaDataBlock* dataBlock, uint devFOURCC = PVRTEX_CURR_IDENT)
         {
             if (m_hTextureHeader != null)
             {
-                if (PVRTexLib_GetMetaDataBlock(m_hTextureHeader, devFOURCC, key, dataBlock, bytes => Marshal.AllocHGlobal((int)bytes)))
+                if (PVRTexLib_GetMetaDataBlock(m_hTextureHeader, devFOURCC, key, dataBlock, Alloc))
                 {
                     return true;
                 }
             }
 
             dataBlock->Reset();
+            return false;
+        }
+
+        public bool GetMetaDataBlock(uint key, out PVRTexLib_MetaDataBlock dataBlock, uint devFOURCC = PVRTEX_CURR_IDENT)
+        {
+            PVRTexLib_MetaDataBlock temp = new PVRTexLib_MetaDataBlock();
+            temp.Reset();
+            if (m_hTextureHeader != null)
+            {
+                if (PVRTexLib_GetMetaDataBlock(m_hTextureHeader, devFOURCC, key, &temp, Alloc))
+                {
+                    dataBlock = temp;
+                    return true;
+                }
+            }
+            dataBlock = temp;
             return false;
         }
 
@@ -752,14 +793,11 @@ namespace PVRTexLib
             return false;
         }
 
-        public void SetTextureBumpMap(float bumpScale, sbyte[] bumpOrder)
+        public void SetTextureBumpMap(float bumpScale, string bumpOrder)
         {
             if (m_hTextureHeader != null)
             {
-                fixed (sbyte* ptr = bumpOrder)
-                {
-                    PVRTexLib_SetTextureBumpMap(m_hTextureHeader, bumpScale, ptr);
-                }
+                PVRTexLib_SetTextureBumpMap(m_hTextureHeader, bumpScale, bumpOrder);
             }
         }
 
@@ -771,14 +809,11 @@ namespace PVRTexLib
             }
         }
 
-        public void SetTextureCubeMapOrder(sbyte[] cubeMapOrder)
+        public void SetTextureCubeMapOrder(string cubeMapOrder)
         {
             if (m_hTextureHeader != null)
             {
-                fixed (sbyte* ptr = cubeMapOrder)
-                {
-                    PVRTexLib_SetTextureCubeMapOrder(m_hTextureHeader, ptr);
-                }
+                PVRTexLib_SetTextureCubeMapOrder(m_hTextureHeader, cubeMapOrder);
             }
         }
 
@@ -886,19 +921,16 @@ namespace PVRTexLib
 
         protected void Destroy()
         {
-            if (m_hTexture != null)
+            void* hTexture = m_hTexture;
+            if (hTexture != null)
             {
-                PVRTexLib_DestroyTexture(m_hTexture);
+                PVRTexLib_DestroyTexture(hTexture);
                 m_hTexture = null;
                 m_hTextureHeader = null;
             }
         }
 
-        public void* GetTextureDataPointer(
-        uint MIPLevel = 0U,
-        uint arrayMember = 0U,
-        uint faceNumber = 0U,
-        uint ZSlice = 0U)
+        public void* GetTextureDataPointer(uint MIPLevel = 0U, uint arrayMember = 0U, uint faceNumber = 0U, uint ZSlice = 0U)
         {
             if (m_hTexture != null)
             {
@@ -908,11 +940,7 @@ namespace PVRTexLib
             return null;
         }
 
-        public void* GetTextureDataConstPointer(
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint faceNumber = 0U,
-            uint ZSlice = 0U)
+        public void* GetTextureDataConstPointer(uint MIPLevel = 0U, uint arrayMember = 0U, uint faceNumber = 0U, uint ZSlice = 0U)
         {
             if (m_hTexture != null)
             {
@@ -940,11 +968,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SaveTextureToMemory(
-        PVRTexLibFileContainerType fileType,
-        void* privateData,
-        ulong* outSize,
-        Func<IntPtr, ulong, IntPtr> pfnRealloc)
+        public bool SaveTextureToMemory(PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, Func<IntPtr, ulong, IntPtr> pfnRealloc)
         {
             if (m_hTexture != null)
             {
@@ -954,11 +978,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SaveTextureToMemory(
-        PVRTexLibFileContainerType fileType,
-        void* privateData,
-        out ulong outSize,
-        Func<IntPtr, ulong, IntPtr> pfnRealloc)
+        public bool SaveTextureToMemory(PVRTexLibFileContainerType fileType, void* privateData, out ulong outSize, Func<IntPtr, ulong, IntPtr> pfnRealloc)
         {
             if (m_hTexture != null)
             {
@@ -984,12 +1004,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SaveSurfaceToImageFile(
-                string filePath,
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint face = 0U,
-            uint ZSlice = 0U)
+        public bool SaveSurfaceToImageFile(string filePath, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint ZSlice = 0U)
         {
             if (m_hTexture != null)
             {
@@ -1035,11 +1050,7 @@ namespace PVRTexLib
             return textures;
         }
 
-        public bool Resize(
-        uint newWidth,
-        uint newHeight,
-        uint newDepth,
-        PVRTexLibResizeMode resizeMode)
+        public bool Resize(uint newWidth, uint newHeight, uint newDepth, PVRTexLibResizeMode resizeMode)
         {
             if (m_hTexture != null)
             {
@@ -1049,13 +1060,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool ResizeCanvas(
-            uint newWidth,
-            uint newHeight,
-            uint newDepth,
-            int xOffset,
-            int yOffset,
-            int zOffset)
+        public bool ResizeCanvas(uint newWidth, uint newHeight, uint newDepth, int xOffset, int yOffset, int zOffset)
         {
             if (m_hTexture != null)
             {
@@ -1115,12 +1120,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SetChannels(
-        uint numChannelSets,
-
-        PVRTexLibChannelName* channels,
-
-        uint* pValues)
+        public bool SetChannels(uint numChannelSets, PVRTexLibChannelName* channels, uint* pValues)
         {
             if (m_hTexture != null)
             {
@@ -1130,10 +1130,41 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SetChannels(
-            uint numChannelSets,
-                 PVRTexLibChannelName* channels,
-                 float* pValues)
+        public bool SetChannels(PVRTexLibChannelName[] channels, uint[] pValues)
+        {
+            if (m_hTexture != null)
+            {
+                fixed (PVRTexLibChannelName* channelsPtr = &channels[0])
+                {
+                    fixed (uint* pValuesPtr = &pValues[0])
+                    {
+                        return PVRTexLib_SetTextureChannels(m_hTexture, (uint)Math.Min(channels.Length, pValues.Length), channelsPtr, pValuesPtr);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+        public bool SetChannels(ReadOnlySpan<PVRTexLibChannelName> channels, ReadOnlySpan<uint> pValues)
+        {
+            if (m_hTexture != null)
+            {
+                fixed (PVRTexLibChannelName* channelsPtr = &channels[0])
+                {
+                    fixed (uint* pValuesPtr = &pValues[0])
+                    {
+                        return PVRTexLib_SetTextureChannels(m_hTexture, (uint)Math.Min(channels.Length, pValues.Length), channelsPtr, pValuesPtr);
+                    }
+                }
+            }
+
+            return false;
+        }
+#endif
+
+        public bool SetChannels(uint numChannelSets, PVRTexLibChannelName* channels, float* pValues)
         {
             if (m_hTexture != null)
             {
@@ -1143,11 +1174,41 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool CopyChannels(
-                PVRTexture sourceTexture,
-            uint numChannelCopies,
-                PVRTexLibChannelName* destinationChannels,
-                PVRTexLibChannelName* sourceChannels)
+        public bool SetChannels(PVRTexLibChannelName[] channels, float[] pValues)
+        {
+            if (m_hTexture != null)
+            {
+                fixed (PVRTexLibChannelName* channelsPtr = &channels[0])
+                {
+                    fixed (float* pValuesPtr = &pValues[0])
+                    {
+                        return PVRTexLib_SetTextureChannelsFloat(m_hTexture, (uint)Math.Min(channels.Length, pValues.Length), channelsPtr, pValuesPtr);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+        public bool SetChannels(ReadOnlySpan<PVRTexLibChannelName> channels, ReadOnlySpan<float> pValues)
+        {
+            if (m_hTexture != null)
+            {
+                fixed (PVRTexLibChannelName* channelsPtr = &channels[0])
+                {
+                    fixed (float* pValuesPtr = &pValues[0])
+                    {
+                        return PVRTexLib_SetTextureChannelsFloat(m_hTexture, (uint)Math.Min(channels.Length, pValues.Length), channelsPtr, pValuesPtr);
+                    }
+                }
+            }
+
+            return false;
+        }
+#endif
+
+        public bool CopyChannels(PVRTexture sourceTexture, uint numChannelCopies, PVRTexLibChannelName* destinationChannels, PVRTexLibChannelName* sourceChannels)
         {
             if (m_hTexture != null && sourceTexture.m_hTexture != null)
             {
@@ -1156,6 +1217,34 @@ namespace PVRTexLib
 
             return false;
         }
+
+        public bool CopyChannels(PVRTexture sourceTexture, PVRTexLibChannelName[] destinationChannels, PVRTexLibChannelName[] sourceChannels)
+        {
+            if (m_hTexture != null && sourceTexture.m_hTexture != null)
+            {
+                fixed (PVRTexLibChannelName* destinationChannelsPtr = destinationChannels, sourceChannelsPtr = sourceChannels)
+                {
+                    return PVRTexLib_CopyTextureChannels(m_hTexture, sourceTexture.m_hTexture, (uint)Math.Min(destinationChannels.Length, sourceChannels.Length), destinationChannelsPtr, sourceChannelsPtr);
+                }
+            }
+
+            return false;
+        }
+
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+        public bool CopyChannels(PVRTexture sourceTexture, ReadOnlySpan<PVRTexLibChannelName> destinationChannels, ReadOnlySpan<PVRTexLibChannelName> sourceChannels)
+        {
+            if (m_hTexture != null && sourceTexture.m_hTexture != null)
+            {
+                fixed (PVRTexLibChannelName* destinationChannelsPtr = destinationChannels, sourceChannelsPtr = sourceChannels)
+                {
+                    return PVRTexLib_CopyTextureChannels(m_hTexture, sourceTexture.m_hTexture, (uint)Math.Min(destinationChannels.Length, sourceChannels.Length), destinationChannelsPtr, sourceChannelsPtr);
+                }
+            }
+
+            return false;
+        }
+#endif
 
         public bool GenerateNormalMap(float fScale, string channelOrder)
         {
@@ -1187,14 +1276,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool Transcode(
-            ulong pixelFormat,
-            PVRTexLibVariableType channelType,
-            PVRTexLibColourSpace colourspace,
-            PVRTexLibCompressorQuality quality = PVRTexLibCompressorQuality.PVRTLCQ_PVRTCNormal,
-            bool doDither = false,
-            float maxRange = 1.0f,
-            uint maxThreads = 0U)
+        public bool Transcode(ulong pixelFormat, PVRTexLibVariableType channelType, PVRTexLibColourSpace colourspace, PVRTexLibCompressorQuality quality = PVRTexLibCompressorQuality.PVRTLCQ_PVRTCNormal, bool doDither = false, float maxRange = 1.0f, uint maxThreads = 0U)
         {
             if (m_hTexture != null)
             {
@@ -1202,7 +1284,11 @@ namespace PVRTexLib
                 PVRTexLib_TranscoderOptions options;
                 options.sizeofStruct = (uint)sizeof(PVRTexLib_TranscoderOptions);
                 options.pixelFormat = pixelFormat;
+#if NET8_0_OR_GREATER
+                options.channelType[0] = options.channelType[1] = options.channelType[2] = options.channelType[3] = channelType;
+#else
                 options.channelType0 = options.channelType1 = options.channelType2 = options.channelType3 = channelType;
+#endif
                 options.colourspace = colourspace;
                 options.quality = quality;
                 options.doDither = doDither;
@@ -1291,13 +1377,20 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool MeanError(
-                PVRTexture texture,
-            PVRTexLib_ErrorMetrics* metrics,
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint face = 0U,
-            uint zSlice = 0U)
+        public bool MaxDifference(PVRTexture texture, out PVRTexLib_ErrorMetrics metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
+        {
+            PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
+            if (m_hTexture != null && texture.m_hTexture != null)
+            {
+                bool succeed = PVRTexLib_MaxDifference(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, &temp);
+                metrics = temp;
+                return succeed;
+            }
+            metrics = temp;
+            return false;
+        }
+
+        public bool MeanError(PVRTexture texture, PVRTexLib_ErrorMetrics* metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1307,13 +1400,20 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool MeanSquaredError(
-                PVRTexture texture,
-            PVRTexLib_ErrorMetrics* metrics,
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint face = 0U,
-            uint zSlice = 0U)
+        public bool MeanError(PVRTexture texture, out PVRTexLib_ErrorMetrics metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
+        {
+            PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
+            if (m_hTexture != null && texture.m_hTexture != null)
+            {
+                bool succeed = PVRTexLib_MeanError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, &temp);
+                metrics = temp;
+                return succeed;
+            }
+            metrics = temp;
+            return false;
+        }
+
+        public bool MeanSquaredError(PVRTexture texture, PVRTexLib_ErrorMetrics* metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1323,13 +1423,20 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool RootMeanSquaredError(
-                 PVRTexture texture,
-            PVRTexLib_ErrorMetrics* metrics,
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint face = 0U,
-            uint zSlice = 0U)
+        public bool MeanSquaredError(PVRTexture texture, out PVRTexLib_ErrorMetrics metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
+        {
+            PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
+            if (m_hTexture != null && texture.m_hTexture != null)
+            {
+                bool succeed = PVRTexLib_MeanSquaredError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                metrics = temp;
+                return succeed;
+            }
+            metrics = temp;
+            return false;
+        }
+
+        public bool RootMeanSquaredError(PVRTexture texture, PVRTexLib_ErrorMetrics* metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1339,13 +1446,20 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool StandardDeviation(
-                 PVRTexture texture,
-            PVRTexLib_ErrorMetrics* metrics,
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint face = 0U,
-            uint zSlice = 0U)
+        public bool RootMeanSquaredError(PVRTexture texture, out PVRTexLib_ErrorMetrics metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
+        {
+            PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
+            if (m_hTexture != null && texture.m_hTexture != null)
+            {
+                bool succeed = PVRTexLib_RootMeanSquaredError(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                metrics = temp;
+                return succeed;
+            }
+            metrics = temp;
+            return false;
+        }
+
+        public bool StandardDeviation(PVRTexture texture, PVRTexLib_ErrorMetrics* metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1355,13 +1469,20 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool PeakSignalToNoiseRatio(
-                 PVRTexture texture,
-            PVRTexLib_ErrorMetrics* metrics,
-            uint MIPLevel = 0U,
-            uint arrayMember = 0U,
-            uint face = 0U,
-            uint zSlice = 0U)
+        public bool StandardDeviation(PVRTexture texture, out PVRTexLib_ErrorMetrics metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
+        {
+            PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
+            if (m_hTexture != null && texture.m_hTexture != null)
+            {
+                bool succeed = PVRTexLib_StandardDeviation(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                metrics = temp;
+                return succeed;
+            }
+            metrics = temp;
+            return false;
+        }
+
+        public bool PeakSignalToNoiseRatio(PVRTexture texture, PVRTexLib_ErrorMetrics* metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1371,11 +1492,20 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool ColourDiff(
-                PVRTexture texture,
-            out PVRTexture textureResult,
-            float multiplier = 1.0f,
-            PVRTexLibColourDiffMode mode = PVRTexLibColourDiffMode.PVRTLCDM_Abs)
+        public bool PeakSignalToNoiseRatio(PVRTexture texture, out PVRTexLib_ErrorMetrics metrics, uint MIPLevel = 0U, uint arrayMember = 0U, uint face = 0U, uint zSlice = 0U)
+        {
+            PVRTexLib_ErrorMetrics temp = new PVRTexLib_ErrorMetrics();
+            if (m_hTexture != null && texture.m_hTexture != null)
+            {
+                bool succeed = PVRTexLib_PeakSignalToNoiseRatio(m_hTexture, texture.m_hTexture, MIPLevel, arrayMember, face, zSlice, metrics);
+                metrics = temp;
+                return succeed;
+            }
+            metrics = temp;
+            return false;
+        }
+
+        public bool ColourDiff(PVRTexture texture, out PVRTexture textureResult, float multiplier = 1.0f, PVRTexLibColourDiffMode mode = PVRTexLibColourDiffMode.PVRTLCDM_Abs)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1390,10 +1520,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool ToleranceDiff(
-             PVRTexture texture,
-            out PVRTexture textureResult,
-            float tolerance = 0.1f)
+        public bool ToleranceDiff(PVRTexture texture, out PVRTexture textureResult, float tolerance = 0.1f)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
@@ -1408,10 +1535,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool BlendDiff(
-             PVRTexture texture,
-            out PVRTexture textureResult,
-            float blendFactor = 0.5f)
+        public bool BlendDiff(PVRTexture texture, out PVRTexture textureResult, float blendFactor = 0.5f)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {
