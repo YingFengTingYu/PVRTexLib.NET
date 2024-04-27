@@ -5,7 +5,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>PVRTexLib.NET</PackageId>
-    <Title>PVRTexLib .NET</Title>
+    <Title>PVRTexLib.NET</Title>
     <Company>$(AssemblyName)</Company>
     <Authors>YingFengTingYu</Authors>
     <Description>A PVRTexLib wrapper translated from PowerVR_Tools\PVRTexTool\Library\Include</Description>
@@ -13,9 +13,19 @@
     <RepositoryUrl>https://github.com/YingFengTingYu/PVRTexLib.NET</RepositoryUrl>
     <PackageTags>pvr;pvrtc;astc;etc;texture;compress;dxt;pvrtexlib</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageProjectUrl>https://www.nuget.org/packages/PVRTexLib.NET/</PackageProjectUrl>
+	<PackageReleaseNotes>1.使用StringBuilder接收字符串
+2.为.NET 8.0和.NET Standard 2.1改写了部分内容</PackageReleaseNotes>
+	<AssemblyVersion>1.0.1</AssemblyVersion>
+	<FileVersion>1.0.1</FileVersion>
+	<PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
