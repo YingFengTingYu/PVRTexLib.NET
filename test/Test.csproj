@@ -14,4 +14,10 @@
     <ProjectReference Include="..\src\PVRTexLib.NET.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="PVRTexLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
