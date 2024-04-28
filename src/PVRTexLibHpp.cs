@@ -514,9 +514,8 @@ namespace PVRTexLib
         {
             if (m_hTextureHeader != null)
             {
-                StringBuilder sb = new StringBuilder(8);
-                PVRTexLib_GetTextureCubeMapOrder(m_hTextureHeader, sb);
-                return sb.ToString();
+                PVRTexLib_GetTextureCubeMapOrder(m_hTextureHeader, out string str);
+                return str;
             }
             return null;
         }
@@ -525,9 +524,8 @@ namespace PVRTexLib
         {
             if (m_hTextureHeader != null)
             {
-                StringBuilder sb = new StringBuilder(8);
-                PVRTexLib_GetTextureBumpMapOrder(m_hTextureHeader, sb);
-                return sb.ToString();
+                PVRTexLib_GetTextureBumpMapOrder(m_hTextureHeader, out string str);
+                return str;
             }
             return null;
         }

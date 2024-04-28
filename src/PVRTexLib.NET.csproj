@@ -16,45 +16,15 @@ PVRTexLib.NET is licensed under the MIT license.</Description>
     <PackageTags>pvr;pvrtc;astc;etc;texture;compress;dxt;pvrtexlib</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://www.nuget.org/packages/PVRTexLib.NET/</PackageProjectUrl>
-	<PackageReleaseNotes>1.使用StringBuilder接收字符串
-2.为.NET 8.0和.NET Standard 2.1改写了部分内容</PackageReleaseNotes>
+	<PackageReleaseNotes>1.修复回调函数报错问题
+2.将枚举名称改为C#命名样式
+3.在.NET 8.0使用LibraryImport特性</PackageReleaseNotes>
 	<AssemblyVersion>1.0.2</AssemblyVersion>
 	<FileVersion>1.0.2</FileVersion>
 	<PackageIcon>icon.png</PackageIcon>
 	<Version>1.0.2</Version>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-    <IsAotCompatible>True</IsAotCompatible>
+	<IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

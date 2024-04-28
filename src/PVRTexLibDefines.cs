@@ -187,8 +187,17 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibAxis
     {
+        /// <summary>
+        /// the axis is x
+        /// </summary>
         X = 0,
+        /// <summary>
+        /// y
+        /// </summary>
         Y = 1,
+        /// <summary>
+        /// the axis is z
+        /// </summary>
         Z = 2
     }
 
@@ -198,11 +207,29 @@ namespace PVRTexLib
     [Flags]
     public enum PVRTexLibOrientation
     {
+        /// <summary>
+        /// the orientation is left
+        /// </summary>
         Left = 1 << PVRTexLibAxis.X,
+        /// <summary>
+        /// the orientation is right
+        /// </summary>
         Right = 0,
+        /// <summary>
+        /// the orientation is up
+        /// </summary>
         Up = 1 << PVRTexLibAxis.Y,
+        /// <summary>
+        /// the orientation is down
+        /// </summary>
         Down = 0,
+        /// <summary>
+        /// the orientation is out
+        /// </summary>
         Out = 1 << PVRTexLibAxis.Z,
+        /// <summary>
+        /// the orientation is in
+        /// </summary>
         In = 0
     }
 
@@ -211,11 +238,29 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibColourSpace
     {
+        /// <summary>
+        /// linear color space
+        /// </summary>
         Linear,
+        /// <summary>
+        /// srgb color space
+        /// </summary>
         sRGB,
+        /// <summary>
+        /// bt601 color space
+        /// </summary>
         BT601,
+        /// <summary>
+        /// bt709 color space
+        /// </summary>
         BT709,
+        /// <summary>
+        /// bt2020 color space
+        /// </summary>
         BT2020,
+        /// <summary>
+        /// Invalid value
+        /// </summary>
         NumSpaces
     }
 
