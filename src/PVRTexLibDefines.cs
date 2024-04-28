@@ -58,7 +58,7 @@ namespace PVRTexLib
         public const int PVRTEX_ALLMIPLEVELS = -1;
 
         /// <summary>
-        /// A 64 bit pixel format ID & this will give you the high bits of a pixel format to check for a compressed format.
+        /// A 64 bit pixel format ID and this will give you the high bits of a pixel format to check for a compressed format.
         /// </summary>
         public const ulong PVRTEX_PFHIGHMASK = 0xffffffff00000000ul;
 
@@ -170,15 +170,45 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibMetaData
     {
+        /// <summary>
+        /// Texture Atlas Coords
+        /// </summary>
         TextureAtlasCoords = 0,
+        /// <summary>
+        /// Bump Data
+        /// </summary>
         BumpData,
+        /// <summary>
+        /// Cube Map Order
+        /// </summary>
         CubeMapOrder,
+        /// <summary>
+        /// Texture Orientation
+        /// </summary>
         TextureOrientation,
+        /// <summary>
+        /// Border Data
+        /// </summary>
         BorderData,
+        /// <summary>
+        /// Padding
+        /// </summary>
         Padding,
+        /// <summary>
+        /// Per-Channel Type
+        /// </summary>
         PerChannelType,
+        /// <summary>
+        /// Supercompression Global Data
+        /// </summary>
         SupercompressionGlobalData,
+        /// <summary>
+        /// Max Range
+        /// </summary>
         MaxRange,
+        /// <summary>
+        /// Invalid value
+        /// </summary>
         NumMetaDataTypes
     }
 
@@ -239,23 +269,23 @@ namespace PVRTexLib
     public enum PVRTexLibColourSpace
     {
         /// <summary>
-        /// linear color space
+        /// linear color space https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#PRIMARIES_ADOBERGB
         /// </summary>
         Linear,
         /// <summary>
-        /// srgb color space
+        /// srgb color space https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#TRANSFER_SRGB
         /// </summary>
         sRGB,
         /// <summary>
-        /// bt601 color space
+        /// bt601 color space https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#PRIMARIES_BT601_EBU
         /// </summary>
         BT601,
         /// <summary>
-        /// bt709 color space
+        /// bt709 color space https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#PRIMARIES_BT709
         /// </summary>
         BT709,
         /// <summary>
-        /// bt2020 color space
+        /// bt2020 color space https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#PRIMARIES_BT2020
         /// </summary>
         BT2020,
         /// <summary>
@@ -269,16 +299,49 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibChannelName
     {
+        /// <summary>
+        /// No channel
+        /// </summary>
         NoChannel,
+        /// <summary>
+        /// Red channel
+        /// </summary>
         Red,
+        /// <summary>
+        /// Green channel
+        /// </summary>
         Green,
+        /// <summary>
+        /// Blue channel
+        /// </summary>
         Blue,
+        /// <summary>
+        /// Alpha channel
+        /// </summary>
         Alpha,
+        /// <summary>
+        /// Luminance channel
+        /// </summary>
         Luminance,
+        /// <summary>
+        /// Intensity channel
+        /// </summary>
         Intensity,
+        /// <summary>
+        /// Depth channel
+        /// </summary>
         Depth,
+        /// <summary>
+        /// Stencil channel
+        /// </summary>
         Stencil,
+        /// <summary>
+        /// Unspecified
+        /// </summary>
         Unspecified,
+        /// <summary>
+        /// Invalid value
+        /// </summary>
         NumChannels
     }
 
@@ -287,86 +350,265 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibPixelFormat
     {
+        /// <summary>
+        /// PVRTCv1 2bpp RGB https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_pvrtc1_2bpp
+        /// </summary>
         PVRTCI_2bpp_RGB,
+        /// <summary>
+        /// PVRTCv1 2bpp RGBA https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_pvrtc1_2bpp
+        /// </summary>
         PVRTCI_2bpp_RGBA,
+        /// <summary>
+        /// PVRTCv1 4bpp RGB https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_pvrtc1_4bpp
+        /// </summary>
         PVRTCI_4bpp_RGB,
+        /// <summary>
+        /// PVRTCv1 4bpp RGBA https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_pvrtc1_4bpp
+        /// </summary>
         PVRTCI_4bpp_RGBA,
+        /// <summary>
+        /// PVRTCv2 2bpp RGBA https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_pvrtc2_2bpp
+        /// </summary>
         PVRTCII_2bpp,
+        /// <summary>
+        /// PVRTCv2 4bpp RGBA https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_pvrtc2_4bpp
+        /// </summary>
         PVRTCII_4bpp,
+        /// <summary>
+        /// ETC1 RGB https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ETC1
+        /// </summary>
         ETC1,
+        /// <summary>
+        /// DXT1 RGB/RGBA(BC1) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc1_noalpha and https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc1_alpha
+        /// </summary>
         DXT1,
+        /// <summary>
+        /// DXT2 RGBA(similar to DXT3: https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc2)
+        /// </summary>
         DXT2,
+        /// <summary>
+        /// DXT3 RGBA(BC2) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc2
+        /// </summary>
         DXT3,
+        /// <summary>
+        /// DXT4 RGBA(similar to DXT5: https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc3)
+        /// </summary>
         DXT4,
+        /// <summary>
+        /// DXT5 RGBA(BC3) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc3
+        /// </summary>
         DXT5,
 
         //These formats are identical to some DXT formats.
+        /// <summary>
+        /// BC1 RGB/RGBA(DXT1) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc1_noalpha and https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc1_alpha
+        /// </summary>
         BC1 = DXT1,
+        /// <summary>
+        /// BC2 RGBA(DXT3) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc2
+        /// </summary>
         BC2 = DXT3,
+        /// <summary>
+        /// BC3 RGBA(DXT5) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#s3tc_bc3
+        /// </summary>
         BC3 = DXT5,
+        /// <summary>
+        /// BC4(ATI1, LATC1, RGTC1, DXN) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#rgtc_bc4 and https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_bc4_signed
+        /// </summary>
         BC4,
+        /// <summary>
+        /// BC5(ATI2, LATC2, RGTC2, DXN) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#rgtc_bc5 and https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_bc5_signed
+        /// </summary>
         BC5,
 
         /* Currently unsupported: */
+        /// <summary>
+        /// BC6H(BPTC RGB HDR) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#bptc_bc6h
+        /// </summary>
         BC6,
+        /// <summary>
+        /// BC7(BPTC RGBA) https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#bptc_bc7
+        /// </summary>
         BC7,
         /* ~~~~~~~~~~~~~~~~~~ */
 
         // Packed YUV formats
         /// <summary>
-        /// https://www.fourcc.org/pixel-format/yuv-uyvy/
+        /// Packed YUV formats https://www.fourcc.org/pixel-format/yuv-uyvy/
         /// </summary>
         UYVY_422,
         /// <summary>
-        /// https://www.fourcc.org/pixel-format/yuv-yuy2/
+        /// Packed YUV formats https://www.fourcc.org/pixel-format/yuv-yuy2/
         /// </summary>
         YUY2_422,
-
+        /// <summary>
+        /// 1bpp
+        /// </summary>
         BW1bpp,
+        /// <summary>
+        /// Shared Exponent R9 G9 B9 E5 https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_example_format_descriptors Table 98
+        /// </summary>
         SharedExponentR9G9B9E5,
+        /// <summary>
+        /// RGBG Compression https://learn.microsoft.com/zh-cn/windows-hardware/drivers/ddi/d3dukmdt/ne-d3dukmdt-_d3dddiformat
+        /// </summary>
         RGBG8888,
+        /// <summary>
+        /// GRGB Compression https://learn.microsoft.com/zh-cn/windows-hardware/drivers/ddi/d3dukmdt/ne-d3dukmdt-_d3dddiformat
+        /// </summary>
         GRGB8888,
+        /// <summary>
+        /// ETC2 RGB https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#RGBETC2
+        /// </summary>
         ETC2_RGB,
+        /// <summary>
+        /// ETC2 RGBA https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#RGBAETC2
+        /// </summary>
         ETC2_RGBA,
+        /// <summary>
+        /// ETC2 RGB A1 https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#RGBETC2_PUNCHTHROUGH
+        /// </summary>
         ETC2_RGB_A1,
+        /// <summary>
+        /// EAC R11 https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#_format_signed_r11_eac
+        /// </summary>
         EAC_R11,
+        /// <summary>
+        /// EAC RG11 https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#Section-signedr11eac-signedr11eac
+        /// </summary>
         EAC_RG11,
 
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_4x4,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_5x4,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_5x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_6x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_6x6,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_8x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_8x6,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_8x8,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_10x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_10x6,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_10x8,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_10x10,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_12x10,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_12x12,
 
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_3x3x3,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_4x3x3,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_4x4x3,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_4x4x4,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_5x4x4,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_5x5x4,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_5x5x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_6x5x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_6x6x5,
+        /// <summary>
+        /// ASTC https://registry.khronos.org/DataFormat/specs/1.3/dataformat.1.3.html#ASTC
+        /// </summary>
         ASTC_6x6x6,
 
+        /// <summary>
+        /// ETC1S https://github.com/BinomialLLC/basis_universal/wiki/.basis-File-Format-and-ETC1S-Texture-Video-Specification
+        /// </summary>
         BASISU_ETC1S,
+        /// <summary>
+        /// UASTC https://github.com/BinomialLLC/basis_universal/wiki/UASTC-Texture-Specification
+        /// </summary>
         BASISU_UASTC,
 
+        /// <summary>
+        /// RGBM is an 8bit RGBA format, where Alpha is sacrificed to store a shared multiplier.
+        /// </summary>
         RGBM,
+        /// <summary>
+        /// RGBD is an 8bit RGBA format, where Alpha is sacrificed to store a shared divider.
+        /// </summary>
         RGBD,
 
+        /// <summary>
+        /// PVRTCv1 RGB 6bpp HDR
+        /// </summary>
         PVRTCI_HDR_6bpp,
+        /// <summary>
+        /// PVRTCv1 RGB 8bpp HDR
+        /// </summary>
         PVRTCI_HDR_8bpp,
+        /// <summary>
+        /// PVRTCv2 RGB 6bpp HDR
+        /// </summary>
         PVRTCII_HDR_6bpp,
+        /// <summary>
+        /// PVRTCv2 RGB 8bpp HDR
+        /// </summary>
         PVRTCII_HDR_8bpp,
 
         // The memory layout for 10 and 12 bit YUV formats that are packed into a WORD (16 bits) is denoted by MSB or LSB:
@@ -493,23 +735,74 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibVariableType
     {
+        /// <summary>
+        /// Normalized UByte
+        /// </summary>
         UnsignedByteNorm,
+        /// <summary>
+        /// Normalized SByte
+        /// </summary>
         SignedByteNorm,
+        /// <summary>
+        /// UByte
+        /// </summary>
         UnsignedByte,
+        /// <summary>
+        /// SByte
+        /// </summary>
         SignedByte,
+        /// <summary>
+        /// Normalized UInt16
+        /// </summary>
         UnsignedShortNorm,
+        /// <summary>
+        /// Normalized SInt16
+        /// </summary>
         SignedShortNorm,
+        /// <summary>
+        /// UInt16
+        /// </summary>
         UnsignedShort,
+        /// <summary>
+        /// SInt16
+        /// </summary>
         SignedShort,
+        /// <summary>
+        /// Normalized UInt32
+        /// </summary>
         UnsignedIntegerNorm,
+        /// <summary>
+        /// Normalized SInt32
+        /// </summary>
         SignedIntegerNorm,
+        /// <summary>
+        /// UInt32
+        /// </summary>
         UnsignedInteger,
+        /// <summary>
+        /// SInt32
+        /// </summary>
         SignedInteger,
+        /// <summary>
+        /// SFloat
+        /// </summary>
         SignedFloat,
+        /// <summary>
+        /// Float
+        /// </summary>
         [Obsolete("the name Float is now deprecated. Use SignedFloat instead.")] Float = SignedFloat,
+        /// <summary>
+        /// UFloat
+        /// </summary>
         UnsignedFloat,
+        /// <summary>
+        /// Invalid value
+        /// </summary>
         NumVarTypes,
 
+        /// <summary>
+        /// Invalid value
+        /// </summary>
         Invalid = 255
     }
 
