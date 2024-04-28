@@ -139,6 +139,12 @@ namespace PVRTexLib
     {
         private const string PVRTexLibName = "PVRTexLib";
 
+        public delegate IntPtr GetMetaDataBlockAllocCallback(uint allocSize);
+
+        public delegate IntPtr TextureCreateRawAllocCallback(ulong allocSize);
+
+        public delegate IntPtr SaveTextureToMemoryRealloc(IntPtr privateData, ulong allocSize);
+
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetDefaultTextureHeaderParams", CallingConvention = CallingConvention.Cdecl)]
         public static extern void PVRTexLib_SetDefaultTextureHeaderParams(PVRHeader_CreateParams* result);
 
@@ -155,7 +161,7 @@ namespace PVRTexLib
         public static extern void PVRTexLib_DestroyTextureHeader(void* header);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureCreateRaw", CallingConvention = CallingConvention.Cdecl)]
-        public static extern PVRTextureHeaderV3* PVRTexLib_TextureCreateRaw(uint width, uint height, uint depth, uint wMin, uint hMin, uint dMin, uint nBPP, bool bMIPMap, Func<ulong, IntPtr> pfnAllocCallback);
+        public static extern PVRTextureHeaderV3* PVRTexLib_TextureCreateRaw(uint width, uint height, uint depth, uint wMin, uint hMin, uint dMin, uint nBPP, bool bMIPMap, TextureCreateRawAllocCallback pfnAllocCallback);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureLoadTiled", CallingConvention = CallingConvention.Cdecl)]
         public static extern void PVRTexLib_TextureLoadTiled(byte* pDst, uint widthDst, uint heightDst, byte* pSrc, uint widthSrc, uint heightSrc, uint elementSize, bool twiddled);
@@ -321,7 +327,7 @@ namespace PVRTexLib
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetMetaDataBlock", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool PVRTexLib_GetMetaDataBlock(void* header, uint devFOURCC, uint key, PVRTexLib_MetaDataBlock* dataBlock, Func<uint, IntPtr> pfnAllocCallback);
+        public static extern bool PVRTexLib_GetMetaDataBlock(void* header, uint devFOURCC, uint key, PVRTexLib_MetaDataBlock* dataBlock, GetMetaDataBlockAllocCallback pfnAllocCallback);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasMetaData", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -384,7 +390,7 @@ namespace PVRTexLib
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToMemory", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool PVRTexLib_SaveTextureToMemory(void* texture, PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, Func<IntPtr, ulong, IntPtr> pfnRealloc);
+        public static extern bool PVRTexLib_SaveTextureToMemory(void* texture, PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, SaveTextureToMemoryRealloc pfnRealloc);
 
         [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveSurfaceToImageFile", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I1)]

@@ -7,14 +7,39 @@ using static PVRTexLib.PVRDefine;
 
 namespace PVRTexLib
 {
+    public class MetaDataBlock
+    {
+        public uint DevFOURCC;
+        public uint u32Key;
+        public uint u32DataSize;
+        public byte[] Data;
+
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER
+        public ReadOnlySpan<byte> Span => Data;
+#endif
+
+        public MetaDataBlock()
+        {
+            Reset();
+        }
+
+        public void Reset()
+        {
+            DevFOURCC = PVRTEX_CURR_IDENT;
+            u32Key = 0u;
+            u32DataSize = 0u;
+            Data = null;
+        }
+    }
+
     public unsafe class PVRTextureHeader : IDisposable
     {
         protected void* m_hTextureHeader;
 #if NET6_0_OR_GREATER
-        public static Func<uint, IntPtr> Alloc = bytes => (IntPtr)NativeMemory.Alloc(bytes);
+        public static GetMetaDataBlockAllocCallback Alloc = bytes => (IntPtr)NativeMemory.Alloc(bytes);
         public static Action<IntPtr> Free = ptr => NativeMemory.Free((void*)ptr);
 #else
-        public static Func<uint, IntPtr> Alloc = bytes => Marshal.AllocHGlobal((int)bytes);
+        public static GetMetaDataBlockAllocCallback Alloc = bytes => Marshal.AllocHGlobal((int)bytes);
         public static Action<IntPtr> Free = ptr => Marshal.FreeHGlobal(ptr);
 #endif
         public void* Header => m_hTextureHeader;
@@ -786,6 +811,26 @@ namespace PVRTexLib
             return false;
         }
 
+        public MetaDataBlock GetMetaDataBlock(uint key, uint devFOURCC = PVRTEX_CURR_IDENT)
+        {
+            if (m_hTextureHeader != null)
+            {
+                PVRTexLib_MetaDataBlock temp = new PVRTexLib_MetaDataBlock();
+                if (PVRTexLib_GetMetaDataBlock(m_hTextureHeader, devFOURCC, key, &temp, Alloc))
+                {
+                    MetaDataBlock block = new MetaDataBlock();
+                    block.DevFOURCC = temp.DevFOURCC;
+                    block.u32Key = temp.u32Key;
+                    block.u32DataSize = temp.u32DataSize;
+                    block.Data = new byte[temp.u32DataSize];
+                    Marshal.Copy((IntPtr)temp.Data, block.Data, 0, (int)temp.u32DataSize);
+                    Free((IntPtr)temp.Data);
+                    return block;
+                }
+            }
+            return null;
+        }
+
         public bool TextureHasMetaData(uint key, uint devFOURCC = PVRTEX_CURR_IDENT)
         {
             if (m_hTextureHeader != null)
@@ -843,6 +888,22 @@ namespace PVRTexLib
                 fixed (PVRTexLib_MetaDataBlock* ptr = &dataBlock)
                 {
                     PVRTexLib_AddMetaData(m_hTextureHeader, ptr);
+                }
+            }
+        }
+
+        public void AddMetaData(MetaDataBlock dataBlock)
+        {
+            if (m_hTextureHeader != null && dataBlock.u32DataSize != 0)
+            {
+                fixed (byte* ptr = &dataBlock.Data[0])
+                {
+                    PVRTexLib_MetaDataBlock temp = new PVRTexLib_MetaDataBlock();
+                    temp.DevFOURCC = dataBlock.DevFOURCC;
+                    temp.u32Key = dataBlock.u32Key;
+                    temp.u32DataSize = dataBlock.u32DataSize;
+                    temp.Data = ptr;
+                    PVRTexLib_AddMetaData(m_hTextureHeader, &temp);
                 }
             }
         }
@@ -971,7 +1032,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SaveTextureToMemory(PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, Func<IntPtr, ulong, IntPtr> pfnRealloc)
+        public bool SaveTextureToMemory(PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, SaveTextureToMemoryRealloc pfnRealloc)
         {
             if (m_hTexture != null)
             {
@@ -981,7 +1042,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool SaveTextureToMemory(PVRTexLibFileContainerType fileType, void* privateData, out ulong outSize, Func<IntPtr, ulong, IntPtr> pfnRealloc)
+        public bool SaveTextureToMemory(PVRTexLibFileContainerType fileType, void* privateData, out ulong outSize, SaveTextureToMemoryRealloc pfnRealloc)
         {
             if (m_hTexture != null)
             {
