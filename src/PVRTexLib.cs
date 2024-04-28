@@ -4,66 +4,121 @@ using System.Security;
 
 namespace PVRTexLib
 {
-    /// <summary>***********************************************************************</summary>
-    /// <remarks>
-    /// <para>Structure containing various texture header parameters for</para>
-    /// <para>PVRTexLib_CreateTextureHeader().</para>
-    /// <para>***********************************************************************</para>
-    /// </remarks>
+    /// <summary>
+    /// Structure containing various texture header parameters for
+    /// PVRTexLib_CreateTextureHeader().
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct PVRHeader_CreateParams
     {
+        /// <summary>
+        /// pixel format
+        /// </summary>
         public ulong pixelFormat;
+        /// <summary>
+        /// texture width
+        /// </summary>
         public uint width;
+        /// <summary>
+        /// texture height
+        /// </summary>
         public uint height;
+        /// <summary>
+        /// texture depth
+        /// </summary>
         public uint depth;
+        /// <summary>
+        /// number of MIP maps
+        /// </summary>
         public uint numMipMaps;
+        /// <summary>
+        /// number of array members
+        /// </summary>
         public uint numArrayMembers;
+        /// <summary>
+        /// number of faces
+        /// </summary>
         public uint numFaces;
+        /// <summary>
+        /// colour space
+        /// </summary>
         public PVRTexLibColourSpace colourSpace;
+        /// <summary>
+        /// channel type
+        /// </summary>
         public PVRTexLibVariableType channelType;
+        /// <summary>
+        /// has the RGB been pre-multiplied by the alpha?
+        /// </summary>
         public bool preMultiplied;
     }
 
-    /// <summary>***********************************************************************</summary>
-    /// <remarks>
-    /// <para>Structure containing a textures orientation in each axis.</para>
-    /// <para>***********************************************************************</para>
-    /// </remarks>
+    /// <summary>
+    /// Structure containing a textures orientation in each axis.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct PVRTexLib_Orientation
     {
+        /// <summary>
+        /// X axis orientation
+        /// </summary>
         public PVRTexLibOrientation x;
+        /// <summary>
+        /// Y axis orientation
+        /// </summary>
         public PVRTexLibOrientation y;
+        /// <summary>
+        /// Z axis orientation
+        /// </summary>
         public PVRTexLibOrientation z;
     }
 
-    /// <summary>***********************************************************************</summary>
-    /// <remarks>
-    /// <para>Structure containing a OpenGL[ES] format.</para>
-    /// <para>***********************************************************************</para>
-    /// </remarks>
+    /// <summary>
+    /// Structure containing a OpenGL[ES] format.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct PVRTexLib_OpenGLFormat
     {
+        /// <summary>
+        /// GL internal format
+        /// </summary>
         public uint internalFormat;
+        /// <summary>
+        /// GL format
+        /// </summary>
         public uint format;
+        /// <summary>
+        /// GL type
+        /// </summary>
         public uint type;
     }
 
-    /// <summary>***********************************************************************</summary>
-    /// <remarks>
-    /// <para>Structure containing a block of meta data for a texture.</para>
-    /// <para>***********************************************************************</para>
-    /// </remarks>
+    /// <summary>
+    /// Structure containing a block of meta data for a texture.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public unsafe struct PVRTexLib_MetaDataBlock
     {
+        /// <summary>
+        /// A 4cc descriptor of the data type's creator. Values starting with 'PVR' are reserved for PVRTexLib.
+        /// </summary>
         public uint DevFOURCC;
+        /// <summary>
+        /// A unique value identifying the data type, and thus how to read it. For example PVRTexLibMetaData.
+        /// </summary>
         public uint u32Key;
+        /// <summary>
+        /// Size of 'Data' in bytes.
+        /// </summary>
         public uint u32DataSize;
+        /// <summary>
+        /// Meta data bytes
+        /// </summary>
         public byte* Data;
 
+        /// <summary>
+        /// Reset PVRTexLib_MetaDataBlock
+        /// </summary>
         public unsafe void Reset()
         {
             DevFOURCC = PVRDefine.PVRTEX_CURR_IDENT;
@@ -74,6 +129,10 @@ namespace PVRTexLib
     }
 
 #if NET8_0_OR_GREATER
+    /// <summary>
+    /// An array with 4 elements
+    /// </summary>
+    /// <typeparam name="T">element type</typeparam>
     [System.Runtime.CompilerServices.InlineArray(4)]
     public struct Buffer4<T>
     {
@@ -81,69 +140,164 @@ namespace PVRTexLib
     }
 #endif
 
+    /// <summary>
+    /// Structure containing the transcoder options for
+    /// PVRTexLib_TranscodeTexture().
+    /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct PVRTexLib_TranscoderOptions
     {
+        /// <summary>
+        /// For versioning - sizeof(PVRTexLib_TranscoderOptions)
+        /// </summary>
         public uint sizeofStruct;
+        /// <summary>
+        /// Pixel format type
+        /// </summary>
         public ulong pixelFormat;
 #if NET8_0_OR_GREATER
+        /// <summary>
+        /// Per-channel variable type.
+        /// </summary>
         public Buffer4<PVRTexLibVariableType> channelType;
 #else
+        /// <summary>
+        /// Per-channel variable type.
+        /// </summary>
         public PVRTexLibVariableType channelType0;
+        /// <summary>
+        /// Per-channel variable type.
+        /// </summary>
         public PVRTexLibVariableType channelType1;
+        /// <summary>
+        /// Per-channel variable type.
+        /// </summary>
         public PVRTexLibVariableType channelType2;
+        /// <summary>
+        /// Per-channel variable type.
+        /// </summary>
         public PVRTexLibVariableType channelType3;
 #endif
+        /// <summary>
+        /// Colour space
+        /// </summary>
         public PVRTexLibColourSpace colourspace;
+        /// <summary>
+        /// Compression quality for PVRTC, ASTC, ETC, BASISU and IMGIC, higher quality usually requires more processing time.
+        /// </summary>
         public PVRTexLibCompressorQuality quality;
+        /// <summary>
+        /// Apply dithering to lower precision formats.
+        /// </summary>
         public bool doDither;
+        /// <summary>
+        /// Max range value for RGB[M|D] encoding
+        /// </summary>
         public float maxRange;
+        /// <summary>
+        /// Max number of threads to use for transcoding, if set to 0 PVRTexLib will use all available cores.
+        /// </summary>
         public uint maxThreads;
     }
 
-    /// <summary>***********************************************************************</summary>
-    /// <remarks>
-    /// <para>Structure containing the resulting error metrics computed by:</para>
-    /// <para>PVRTexLib_MaxDifference(),</para>
-    /// <para>PVRTexLib_MeanError(),</para>
-    /// <para>PVRTexLib_MeanSquaredError(),</para>
-    /// <para>PVRTexLib_RootMeanSquaredError(),</para>
-    /// <para>PVRTexLib_StandardDeviation(),</para>
-    /// <para>PVRTexLib_PeakSignalToNoiseRatio().</para>
-    /// <para>***********************************************************************</para>
-    /// </remarks>
+    /// <summary>
+    /// Structure containing the resulting error metrics computed by:
+    /// PVRTexLib_MaxDifference(),
+    /// PVRTexLib_MeanError(),
+    /// PVRTexLib_MeanSquaredError(),
+    /// PVRTexLib_RootMeanSquaredError(),
+    /// PVRTexLib_StandardDeviation(),
+    /// PVRTexLib_PeakSignalToNoiseRatio().
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct PVRTexLib_ErrorMetrics
     {
+        /// <summary>
+        /// Per-channel metrics
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct PVRTexLib_ErrorMetrics_Channel
         {
+            /// <summary>
+            /// Channel name. PVRTLCN_NoChannel indicates invalid entry.
+            /// </summary>
             public PVRTexLibChannelName name;
+            /// <summary>
+            /// Value for this channel.
+            /// </summary>
             public double value;
         }
 
 #if NET8_0_OR_GREATER
+        /// <summary>
+        /// Per-channel metrics, not all entries have to be valid.
+        /// </summary>
         public Buffer4<PVRTexLib_ErrorMetrics_Channel> channel;
 #else
+        /// <summary>
+        /// Per-channel metrics, not all entries have to be valid.
+        /// </summary>
         public PVRTexLib_ErrorMetrics_Channel channel0;
+        /// <summary>
+        /// Per-channel metrics, not all entries have to be valid.
+        /// </summary>
         public PVRTexLib_ErrorMetrics_Channel channel1;
+        /// <summary>
+        /// Per-channel metrics, not all entries have to be valid.
+        /// </summary>
         public PVRTexLib_ErrorMetrics_Channel channel2;
+        /// <summary>
+        /// Per-channel metrics, not all entries have to be valid.
+        /// </summary>
         public PVRTexLib_ErrorMetrics_Channel channel3;
 #endif
+        /// <summary>
+        /// Value for all channels.
+        /// </summary>
         public double allChannels;
+        /// <summary>
+        /// Value for RGB channels.
+        /// </summary>
         public double rgbChannels;
     }
 
+    /// <summary>
+    /// Native functions
+    /// </summary>
     public static unsafe partial class PVRTexLibNative
     {
         private const string PVRTexLibName = "PVRTexLib";
 
+        /// <summary>
+        /// Callback for GetMetaDataBlock
+        /// </summary>
+        /// <param name="allocSize">alloc memory size</param>
+        /// <returns>memory pointer</returns>
         public delegate IntPtr GetMetaDataBlockAllocCallback(uint allocSize);
 
+        /// <summary>
+        /// Callback for TextureCreateRaw
+        /// </summary>
+        /// <param name="allocSize">alloc memory size</param>
+        /// <returns>memory pointer</returns>
         public delegate IntPtr TextureCreateRawAllocCallback(ulong allocSize);
 
+        /// <summary>
+        /// Callback for SaveTextureToMemory
+        /// </summary>
+        /// <param name="privateData">raw pointer</param>
+        /// <param name="allocSize">alloc memory size</param>
+        /// <returns>memory pointer</returns>
         public delegate IntPtr SaveTextureToMemoryRealloc(IntPtr privateData, ulong allocSize);
 
+        /// <summary>
+        /// Gets the cube map face order.
+        /// cubeOrder string will be in the form "ZzXxYy" with capitals
+        /// representing positive and lower case letters representing
+        /// negative. I.e. Z=Z-Positive, z=Z-Negative.
+        /// </summary>
+        /// <param name="header">A handle to a previously allocated PVRTexLib_PVRTextureHeader.</param>
+        /// <param name="cubeOrder">terminated cube map order string.</param>
         public static void PVRTexLib_GetTextureCubeMapOrder(void* header, out string cubeOrder)
         {
             sbyte* cubeOrderBuffer = stackalloc sbyte[7];
@@ -151,6 +305,19 @@ namespace PVRTexLib
             cubeOrder = Marshal.PtrToStringAnsi((IntPtr)cubeOrderBuffer);
         }
 
+        /// <summary>
+        /// Gets the bump map channel order relative to rgba.
+        /// For	example, an RGB texture with bumps mapped to XYZ returns
+        /// 'xyz'. A BGR texture with bumps in the order ZYX will also
+        /// return 'xyz' as the mapping is the same: R=X, G=Y, B=Z.
+        /// If the letter 'h' is present in the string, it means that
+        /// the height map has been stored here.
+        /// Other characters are possible if the bump map was created
+        /// manually, but PVRTexLib will ignore these characters. They
+        /// are returned simply for completeness.
+        /// </summary>
+        /// <param name="header">A handle to a previously allocated PVRTexLib_PVRTextureHeader.</param>
+        /// <param name="bumpOrder">terminated bump map order string relative to rgba.</param>
         public static void PVRTexLib_GetTextureBumpMapOrder(void* header, out string bumpOrder)
         {
             sbyte* bumpOrderBuffer = stackalloc sbyte[5];
