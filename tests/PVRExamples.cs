@@ -28,7 +28,7 @@ namespace PVRTexLib.Tests
             // Decompress texture to the standard RGBA8888 format.
             ulong RGBA8888 = PVRDefine.PVRTGENPIXELID4('r', 'g', 'b', 'a', 8, 8, 8, 8);
 
-            if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_Linear))
+            if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.Linear))
             {
                 return null;
             }
@@ -68,7 +68,7 @@ namespace PVRTexLib.Tests
                 // for example: R32G32B32A32 Signed float
                 ulong RGBA8888 = PVRDefine.PVRTGENPIXELID4('r', 'g', 'b', 'a', 8, 8, 8, 8);
 
-                if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_Linear))
+                if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.Linear))
                 {
                     return false;
                 }
@@ -81,7 +81,7 @@ namespace PVRTexLib.Tests
             }
 
             // Generate MIP-map chain
-            if (!texture.GenerateMIPMaps(PVRTexLibResizeMode.PVRTLRM_Linear))
+            if (!texture.GenerateMIPMaps(PVRTexLibResizeMode.Linear))
             {
                 return false;
             }
@@ -89,7 +89,7 @@ namespace PVRTexLib.Tests
             // Compress to PVRTC 4bpp.
             // Note: A better compressor quality will improve image quality,
             // at the expensive of compression speed.
-            if (!texture.Transcode((ulong)PVRTexLibPixelFormat.PVRTLPF_PVRTCI_4bpp_RGB, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_Linear, PVRTexLibCompressorQuality.PVRTLCQ_PVRTCNormal))
+            if (!texture.Transcode((ulong)PVRTexLibPixelFormat.PVRTCI_4bpp_RGB, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.Linear, PVRTexLibCompressorQuality.PVRTCNormal))
             {
                 return false;
             }
@@ -130,14 +130,14 @@ namespace PVRTexLib.Tests
                 // for example: R32G32B32A32 Signed float
                 ulong RGBA8888 = PVRDefine.PVRTGENPIXELID4('r', 'g', 'b', 'a', 8, 8, 8, 8);
 
-                if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_Linear))
+                if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.Linear))
                 {
                     return false;
                 }
             }
 
             // Generate MIP-map chain
-            if (!texture.GenerateMIPMaps(PVRTexLibResizeMode.PVRTLRM_Linear))
+            if (!texture.GenerateMIPMaps(PVRTexLibResizeMode.Linear))
             {
                 return false;
             }
@@ -222,7 +222,7 @@ namespace PVRTexLib.Tests
             // In this case we are using the PVR FOURCC and
             // PVRTexLibMetaData::PVRTLMD_TextureOrientation.
             MetaDataBlock metaData;
-            const uint key = (uint)PVRTexLibMetaData.PVRTLMD_TextureOrientation;
+            const uint key = (uint)PVRTexLibMetaData.TextureOrientation;
             const uint devFOURCC = PVRDefine.PVRTEX_CURR_IDENT;
 
             // Check the call was successful
@@ -231,9 +231,9 @@ namespace PVRTexLib.Tests
             if ((metaData = texture.GetMetaDataBlock(key, devFOURCC)) != null && metaData.u32DataSize != 0)
             {
                 // Do something...
-                Console.WriteLine("X:PVRTexLibOrientation.{0}", (PVRTexLibOrientation)metaData.Data[(int)PVRTexLibAxis.PVRTLA_X]);
-                Console.WriteLine("Y:PVRTexLibOrientation.{0}", (PVRTexLibOrientation)metaData.Data[(int)PVRTexLibAxis.PVRTLA_Y]);
-                Console.WriteLine("Z:PVRTexLibOrientation.{0}", (PVRTexLibOrientation)metaData.Data[(int)PVRTexLibAxis.PVRTLA_Z]);
+                Console.WriteLine("X:PVRTexLibOrientation.{0}", (PVRTexLibOrientation)metaData.Data[(int)PVRTexLibAxis.X]);
+                Console.WriteLine("Y:PVRTexLibOrientation.{0}", (PVRTexLibOrientation)metaData.Data[(int)PVRTexLibAxis.Y]);
+                Console.WriteLine("Z:PVRTexLibOrientation.{0}", (PVRTexLibOrientation)metaData.Data[(int)PVRTexLibAxis.Z]);
             }
 
             // PVRTexLib also has some baked in meta data accessors...
@@ -288,13 +288,13 @@ namespace PVRTexLib.Tests
             // Meta data key, in this case texture orientation
             MetaDataBlock metaData = new MetaDataBlock();
             metaData.DevFOURCC = PVRDefine.PVRTEX_CURR_IDENT;
-            metaData.u32Key = (uint)PVRTexLibMetaData.PVRTLMD_TextureOrientation;
+            metaData.u32Key = (uint)PVRTexLibMetaData.TextureOrientation;
             metaData.u32DataSize = META_DATA_SIZE;
             metaData.Data = new byte[META_DATA_SIZE];
 
-            metaData.Data[(int)PVRTexLibAxis.PVRTLA_X] = (byte)PVRTexLibOrientation.PVRTLO_Left;
-            metaData.Data[(int)PVRTexLibAxis.PVRTLA_Y] = (byte)PVRTexLibOrientation.PVRTLO_Up;
-            metaData.Data[(int)PVRTexLibAxis.PVRTLA_Z] = (byte)PVRTexLibOrientation.PVRTLO_Out;
+            metaData.Data[(int)PVRTexLibAxis.X] = (byte)PVRTexLibOrientation.Left;
+            metaData.Data[(int)PVRTexLibAxis.Y] = (byte)PVRTexLibOrientation.Up;
+            metaData.Data[(int)PVRTexLibAxis.Z] = (byte)PVRTexLibOrientation.Out;
 
             // Insert the meta data into the texture
             texture.AddMetaData(metaData);
@@ -347,7 +347,7 @@ namespace PVRTexLib.Tests
                 // for example: R32G32B32A32 Signed float
                 ulong RGBA8888 = PVRDefine.PVRTGENPIXELID4('r', 'g', 'b', 'a', 8, 8, 8, 8);
 
-                if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_Linear))
+                if (!texture.Transcode(RGBA8888, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.Linear))
                 {
                     return false;
                 }
@@ -393,44 +393,44 @@ namespace PVRTexLib.Tests
                                 {
                                     switch (channelType)
                                     {
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm:
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedByte:
+                                        case PVRTexLibVariableType.UnsignedByteNorm:
+                                        case PVRTexLibVariableType.UnsignedByte:
                                             {
                                                 DoSomethingWithPixel(numChannels, data);
                                                 break;
                                             }
-                                        case PVRTexLibVariableType.PVRTLVT_SignedByteNorm:
-                                        case PVRTexLibVariableType.PVRTLVT_SignedByte:
+                                        case PVRTexLibVariableType.SignedByteNorm:
+                                        case PVRTexLibVariableType.SignedByte:
                                             {
                                                 DoSomethingWithPixel(numChannels, (sbyte*)data);
                                                 break;
                                             }
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedShortNorm:
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedShort:
+                                        case PVRTexLibVariableType.UnsignedShortNorm:
+                                        case PVRTexLibVariableType.UnsignedShort:
                                             {
                                                 DoSomethingWithPixel(numChannels, (ushort*)data);
                                                 break;
                                             }
-                                        case PVRTexLibVariableType.PVRTLVT_SignedShortNorm:
-                                        case PVRTexLibVariableType.PVRTLVT_SignedShort:
+                                        case PVRTexLibVariableType.SignedShortNorm:
+                                        case PVRTexLibVariableType.SignedShort:
                                             {
                                                 DoSomethingWithPixel(numChannels, (short*)data);
                                                 break;
                                             }
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedIntegerNorm:
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedInteger:
+                                        case PVRTexLibVariableType.UnsignedIntegerNorm:
+                                        case PVRTexLibVariableType.UnsignedInteger:
                                             {
                                                 DoSomethingWithPixel(numChannels, (uint*)data);
                                                 break;
                                             }
-                                        case PVRTexLibVariableType.PVRTLVT_SignedIntegerNorm:
-                                        case PVRTexLibVariableType.PVRTLVT_SignedInteger:
+                                        case PVRTexLibVariableType.SignedIntegerNorm:
+                                        case PVRTexLibVariableType.SignedInteger:
                                             {
                                                 DoSomethingWithPixel(numChannels, (int*)data);
                                                 break;
                                             }
-                                        case PVRTexLibVariableType.PVRTLVT_SignedFloat:
-                                        case PVRTexLibVariableType.PVRTLVT_UnsignedFloat:
+                                        case PVRTexLibVariableType.SignedFloat:
+                                        case PVRTexLibVariableType.UnsignedFloat:
                                             {
                                                 DoSomethingWithPixel(numChannels, (float*)data);
                                                 break;

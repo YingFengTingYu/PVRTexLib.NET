@@ -69,7 +69,7 @@ namespace PVRTexLib
             }
         }
 
-        public PVRTextureHeader(ulong pixelFormat, uint width, uint height, uint depth = 1u, uint numMipMaps = 1u, uint numArrayMembers = 1u, uint numFaces = 1u, PVRTexLibColourSpace colourSpace = PVRTexLibColourSpace.PVRTLCS_sRGB, PVRTexLibVariableType channelType = PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, bool preMultiplied = false)
+        public PVRTextureHeader(ulong pixelFormat, uint width, uint height, uint depth = 1u, uint numMipMaps = 1u, uint numArrayMembers = 1u, uint numFaces = 1u, PVRTexLibColourSpace colourSpace = PVRTexLibColourSpace.sRGB, PVRTexLibVariableType channelType = PVRTexLibVariableType.UnsignedByteNorm, bool preMultiplied = false)
         {
             PVRHeader_CreateParams @params;
             @params.pixelFormat = pixelFormat;
@@ -151,7 +151,7 @@ namespace PVRTexLib
             {
                 return PVRTexLib_GetTextureChannelType(m_hTextureHeader);
             }
-            return PVRTexLibVariableType.PVRTLVT_Invalid;
+            return PVRTexLibVariableType.Invalid;
         }
 
         public PVRTexLibColourSpace GetColourSpace()
@@ -160,7 +160,7 @@ namespace PVRTexLib
             {
                 return PVRTexLib_GetTextureColourSpace(m_hTextureHeader);
             }
-            return PVRTexLibColourSpace.PVRTLCS_NumSpaces;
+            return PVRTexLibColourSpace.NumSpaces;
         }
 
         public uint GetTextureWidth(uint mipLevel = 0)
@@ -539,7 +539,7 @@ namespace PVRTexLib
                 return PVRTexLib_GetTexturePixelFormat(m_hTextureHeader);
             }
 
-            return (ulong)(PVRTexLibPixelFormat.PVRTLPF_NumCompressedPFs);
+            return (ulong)(PVRTexLibPixelFormat.NumCompressedPFs);
         }
 
         public bool TextureHasPackedChannelData()
@@ -1399,7 +1399,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool Transcode(ulong pixelFormat, PVRTexLibVariableType channelType, PVRTexLibColourSpace colourspace, PVRTexLibCompressorQuality quality = PVRTexLibCompressorQuality.PVRTLCQ_PVRTCNormal, bool doDither = false, float maxRange = 1.0f, uint maxThreads = 0U)
+        public bool Transcode(ulong pixelFormat, PVRTexLibVariableType channelType, PVRTexLibColourSpace colourspace, PVRTexLibCompressorQuality quality = PVRTexLibCompressorQuality.PVRTCNormal, bool doDither = false, float maxRange = 1.0f, uint maxThreads = 0U)
         {
             if (m_hTexture != null)
             {
@@ -1628,7 +1628,7 @@ namespace PVRTexLib
             return false;
         }
 
-        public bool ColourDiff(PVRTexture texture, out PVRTexture textureResult, float multiplier = 1.0f, PVRTexLibColourDiffMode mode = PVRTexLibColourDiffMode.PVRTLCDM_Abs)
+        public bool ColourDiff(PVRTexture texture, out PVRTexture textureResult, float multiplier = 1.0f, PVRTexLibColourDiffMode mode = PVRTexLibColourDiffMode.Abs)
         {
             if (m_hTexture != null && texture.m_hTexture != null)
             {

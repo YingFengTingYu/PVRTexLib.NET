@@ -19,13 +19,13 @@
         {
             using PVRTexture texture = new PVRTexture(inputPath);
             Assert.That(texture.GetTextureDataSize(), Is.Not.Zero, "texture should not be null");
-            Assert.That(texture.Transcode((ulong)PVRTexLibPixelFormat.PVRTLPF_DXT5, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_sRGB), Is.True, "status should be true");
+            Assert.That(texture.Transcode((ulong)PVRTexLibPixelFormat.DXT5, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.sRGB), Is.True, "status should be true");
             unsafe
             {
                 void* ptr = null;
                 try
                 {
-                    ptr = texture.SaveTextureToMemory(PVRTexLibFileContainerType.PVRTLFCT_DDS, out ulong size);
+                    ptr = texture.SaveTextureToMemory(PVRTexLibFileContainerType.DDS, out ulong size);
                     Assert.That((nint)ptr, Is.Not.Zero, "pointer should not be zero");
                     using UnmanagedMemoryStream memStream = new UnmanagedMemoryStream((byte*)ptr, (long)size);
                     using FileStream fileStream = File.Create(outputPath);

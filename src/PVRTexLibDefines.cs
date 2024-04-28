@@ -5,16 +5,17 @@
  @brief        Public PVRTexLib defines header.
 
 ******************************************************************************/
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace PVRTexLib
 {
+    /// <summary>
+    /// Texture related constants and macros.
+    /// </summary>
     public static partial class PVRDefine
     {
-        /*****************************************************************************
-        * Texture related constants and enumerations.
-        *****************************************************************************/
         /// <summary>
         /// V3 Header Identifiers: 'P''V''R'3
         /// </summary>
@@ -69,15 +70,15 @@ namespace PVRTexLib
         /// <summary>
         /// Generate a 4 channel PixelID.
         /// </summary>
-        /// <param name="C1Name"></param>
-        /// <param name="C2Name"></param>
-        /// <param name="C3Name"></param>
-        /// <param name="C4Name"></param>
-        /// <param name="C1Bits"></param>
-        /// <param name="C2Bits"></param>
-        /// <param name="C3Bits"></param>
-        /// <param name="C4Bits"></param>
-        /// <returns></returns>
+        /// <param name="C1Name">channel1 name</param>
+        /// <param name="C2Name">channel2 name</param>
+        /// <param name="C3Name">channel3 name</param>
+        /// <param name="C4Name">channel4 name</param>
+        /// <param name="C1Bits">channel1 bits</param>
+        /// <param name="C2Bits">channel2 bits</param>
+        /// <param name="C3Bits">channel3 bits</param>
+        /// <param name="C4Bits">channel4 bits</param>
+        /// <returns>format PixelID</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID4(ulong C1Name, ulong C2Name, ulong C3Name, ulong C4Name, ulong C1Bits, ulong C2Bits, ulong C3Bits, ulong C4Bits)
         {
@@ -87,13 +88,13 @@ namespace PVRTexLib
         /// <summary>
         /// Generate a 1 channel PixelID.
         /// </summary>
-        /// <param name="C1Name"></param>
-        /// <param name="C2Name"></param>
-        /// <param name="C3Name"></param>
-        /// <param name="C1Bits"></param>
-        /// <param name="C2Bits"></param>
-        /// <param name="C3Bits"></param>
-        /// <returns></returns>
+        /// <param name="C1Name">channel1 name</param>
+        /// <param name="C2Name">channel2 name</param>
+        /// <param name="C3Name">channel3 name</param>
+        /// <param name="C1Bits">channel1 bits</param>
+        /// <param name="C2Bits">channel2 bits</param>
+        /// <param name="C3Bits">channel3 bits</param>
+        /// <returns>format PixelID</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID3(ulong C1Name, ulong C2Name, ulong C3Name, ulong C1Bits, ulong C2Bits, ulong C3Bits)
         {
@@ -103,11 +104,11 @@ namespace PVRTexLib
         /// <summary>
         /// Generate a 2 channel PixelID.
         /// </summary>
-        /// <param name="C1Name"></param>
-        /// <param name="C2Name"></param>
-        /// <param name="C1Bits"></param>
-        /// <param name="C2Bits"></param>
-        /// <returns></returns>
+        /// <param name="C1Name">channel1 name</param>
+        /// <param name="C2Name">channel2 name</param>
+        /// <param name="C1Bits">channel1 bits</param>
+        /// <param name="C2Bits">channel2 bits</param>
+        /// <returns>format PixelID</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID2(ulong C1Name, ulong C2Name, ulong C1Bits, ulong C2Bits)
         {
@@ -117,9 +118,9 @@ namespace PVRTexLib
         /// <summary>
         /// Generate a 3 channel PixelID.
         /// </summary>
-        /// <param name="C1Name"></param>
-        /// <param name="C1Bits"></param>
-        /// <returns></returns>
+        /// <param name="C1Name">channel1 name</param>
+        /// <param name="C1Bits">channel1 bits</param>
+        /// <returns>format PixelID</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID1(ulong C1Name, ulong C1Bits)
         {
@@ -129,10 +130,11 @@ namespace PVRTexLib
         /// <summary>
         /// 2D texture offset
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="width"></param>
-        /// <returns></returns>
+        /// <param name="x">x point</param>
+        /// <param name="y">y point</param>
+        /// <param name="width">texture width</param>
+        /// <returns>offset of the point</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TEXOFFSET2D(int x, int y, int width)
         {
             return x + y * width;
@@ -141,17 +143,21 @@ namespace PVRTexLib
         /// <summary>
         /// 3D texture offset
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
+        /// <param name="x">x point</param>
+        /// <param name="y">y point</param>
+        /// <param name="z">z point</param>
+        /// <param name="width">texture width</param>
+        /// <param name="height">texture height</param>
+        /// <returns>offset of the point</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TEXOFFSET3D(int x, int y, int z, int width, int height)
         {
             return x + y * width + z * width * height;
         }
 
+        /// <summary>
+        /// header size of pvr3 file
+        /// </summary>
         public const uint PVRTEX3_HEADERSIZE = 52U;
     }
 
@@ -164,16 +170,16 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibMetaData
     {
-        PVRTLMD_TextureAtlasCoords = 0,
-        PVRTLMD_BumpData,
-        PVRTLMD_CubeMapOrder,
-        PVRTLMD_TextureOrientation,
-        PVRTLMD_BorderData,
-        PVRTLMD_Padding,
-        PVRTLMD_PerChannelType,
-        PVRTLMD_SupercompressionGlobalData,
-        PVRTLMD_MaxRange,
-        PVRTLMD_NumMetaDataTypes
+        TextureAtlasCoords = 0,
+        BumpData,
+        CubeMapOrder,
+        TextureOrientation,
+        BorderData,
+        Padding,
+        PerChannelType,
+        SupercompressionGlobalData,
+        MaxRange,
+        NumMetaDataTypes
     }
 
     /// <summary>
@@ -181,22 +187,23 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibAxis
     {
-        PVRTLA_X = 0,
-        PVRTLA_Y = 1,
-        PVRTLA_Z = 2
+        X = 0,
+        Y = 1,
+        Z = 2
     }
 
     /// <summary>
     /// Image orientations per axis
     /// </summary>
+    [Flags]
     public enum PVRTexLibOrientation
     {
-        PVRTLO_Left = 1 << PVRTexLibAxis.PVRTLA_X,
-        PVRTLO_Right = 0,
-        PVRTLO_Up = 1 << PVRTexLibAxis.PVRTLA_Y,
-        PVRTLO_Down = 0,
-        PVRTLO_Out = 1 << PVRTexLibAxis.PVRTLA_Z,
-        PVRTLO_In = 0
+        Left = 1 << PVRTexLibAxis.X,
+        Right = 0,
+        Up = 1 << PVRTexLibAxis.Y,
+        Down = 0,
+        Out = 1 << PVRTexLibAxis.Z,
+        In = 0
     }
 
     /// <summary>
@@ -204,12 +211,12 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibColourSpace
     {
-        PVRTLCS_Linear,
-        PVRTLCS_sRGB,
-        PVRTLCS_BT601,
-        PVRTLCS_BT709,
-        PVRTLCS_BT2020,
-        PVRTLCS_NumSpaces
+        Linear,
+        sRGB,
+        BT601,
+        BT709,
+        BT2020,
+        NumSpaces
     }
 
     /// <summary>
@@ -217,17 +224,17 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibChannelName
     {
-        PVRTLCN_NoChannel,
-        PVRTLCN_Red,
-        PVRTLCN_Green,
-        PVRTLCN_Blue,
-        PVRTLCN_Alpha,
-        PVRTLCN_Luminance,
-        PVRTLCN_Intensity,
-        PVRTLCN_Depth,
-        PVRTLCN_Stencil,
-        PVRTLCN_Unspecified,
-        PVRTLCN_NumChannels
+        NoChannel,
+        Red,
+        Green,
+        Blue,
+        Alpha,
+        Luminance,
+        Intensity,
+        Depth,
+        Stencil,
+        Unspecified,
+        NumChannels
     }
 
     /// <summary>
@@ -235,81 +242,87 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibPixelFormat
     {
-        PVRTLPF_PVRTCI_2bpp_RGB,
-        PVRTLPF_PVRTCI_2bpp_RGBA,
-        PVRTLPF_PVRTCI_4bpp_RGB,
-        PVRTLPF_PVRTCI_4bpp_RGBA,
-        PVRTLPF_PVRTCII_2bpp,
-        PVRTLPF_PVRTCII_4bpp,
-        PVRTLPF_ETC1,
-        PVRTLPF_DXT1,
-        PVRTLPF_DXT2,
-        PVRTLPF_DXT3,
-        PVRTLPF_DXT4,
-        PVRTLPF_DXT5,
+        PVRTCI_2bpp_RGB,
+        PVRTCI_2bpp_RGBA,
+        PVRTCI_4bpp_RGB,
+        PVRTCI_4bpp_RGBA,
+        PVRTCII_2bpp,
+        PVRTCII_4bpp,
+        ETC1,
+        DXT1,
+        DXT2,
+        DXT3,
+        DXT4,
+        DXT5,
 
         //These formats are identical to some DXT formats.
-        PVRTLPF_BC1 = PVRTLPF_DXT1,
-        PVRTLPF_BC2 = PVRTLPF_DXT3,
-        PVRTLPF_BC3 = PVRTLPF_DXT5,
-        PVRTLPF_BC4,
-        PVRTLPF_BC5,
+        BC1 = DXT1,
+        BC2 = DXT3,
+        BC3 = DXT5,
+        BC4,
+        BC5,
 
         /* Currently unsupported: */
-        PVRTLPF_BC6,
-        PVRTLPF_BC7,
+        BC6,
+        BC7,
         /* ~~~~~~~~~~~~~~~~~~ */
 
         // Packed YUV formats
-        PVRTLPF_UYVY_422, // https://www.fourcc.org/pixel-format/yuv-uyvy/
-        PVRTLPF_YUY2_422, // https://www.fourcc.org/pixel-format/yuv-yuy2/
+        /// <summary>
+        /// https://www.fourcc.org/pixel-format/yuv-uyvy/
+        /// </summary>
+        UYVY_422,
+        /// <summary>
+        /// https://www.fourcc.org/pixel-format/yuv-yuy2/
+        /// </summary>
+        YUY2_422,
 
-        PVRTLPF_BW1bpp,
-        PVRTLPF_SharedExponentR9G9B9E5,
-        PVRTLPF_RGBG8888,
-        PVRTLPF_GRGB8888,
-        PVRTLPF_ETC2_RGB,
-        PVRTLPF_ETC2_RGBA,
-        PVRTLPF_ETC2_RGB_A1,
-        PVRTLPF_EAC_R11,
-        PVRTLPF_EAC_RG11,
+        BW1bpp,
+        SharedExponentR9G9B9E5,
+        RGBG8888,
+        GRGB8888,
+        ETC2_RGB,
+        ETC2_RGBA,
+        ETC2_RGB_A1,
+        EAC_R11,
+        EAC_RG11,
 
-        PVRTLPF_ASTC_4x4,
-        PVRTLPF_ASTC_5x4,
-        PVRTLPF_ASTC_5x5,
-        PVRTLPF_ASTC_6x5,
-        PVRTLPF_ASTC_6x6,
-        PVRTLPF_ASTC_8x5,
-        PVRTLPF_ASTC_8x6,
-        PVRTLPF_ASTC_8x8,
-        PVRTLPF_ASTC_10x5,
-        PVRTLPF_ASTC_10x6,
-        PVRTLPF_ASTC_10x8,
-        PVRTLPF_ASTC_10x10,
-        PVRTLPF_ASTC_12x10,
-        PVRTLPF_ASTC_12x12,
+        ASTC_4x4,
+        ASTC_5x4,
+        ASTC_5x5,
+        ASTC_6x5,
+        ASTC_6x6,
+        ASTC_8x5,
+        ASTC_8x6,
+        ASTC_8x8,
+        ASTC_10x5,
+        ASTC_10x6,
+        ASTC_10x8,
+        ASTC_10x10,
+        ASTC_12x10,
+        ASTC_12x12,
 
-        PVRTLPF_ASTC_3x3x3,
-        PVRTLPF_ASTC_4x3x3,
-        PVRTLPF_ASTC_4x4x3,
-        PVRTLPF_ASTC_4x4x4,
-        PVRTLPF_ASTC_5x4x4,
-        PVRTLPF_ASTC_5x5x4,
-        PVRTLPF_ASTC_5x5x5,
-        PVRTLPF_ASTC_6x5x5,
-        PVRTLPF_ASTC_6x6x5,
-        PVRTLPF_ASTC_6x6x6,
+        ASTC_3x3x3,
+        ASTC_4x3x3,
+        ASTC_4x4x3,
+        ASTC_4x4x4,
+        ASTC_5x4x4,
+        ASTC_5x5x4,
+        ASTC_5x5x5,
+        ASTC_6x5x5,
+        ASTC_6x6x5,
+        ASTC_6x6x6,
 
-        PVRTLPF_BASISU_ETC1S,
-        PVRTLPF_BASISU_UASTC,
+        BASISU_ETC1S,
+        BASISU_UASTC,
 
-        PVRTLPF_RGBM,
-        PVRTLPF_RGBD,
+        RGBM,
+        RGBD,
 
-        PVRTLPF_PVRTCI_HDR_6bpp,
-        PVRTLPF_PVRTCI_HDR_8bpp,
-        PVRTLPF_PVRTCII_HDR_6bpp,
-        PVRTLPF_PVRTCII_HDR_8bpp,
+        PVRTCI_HDR_6bpp,
+        PVRTCI_HDR_8bpp,
+        PVRTCII_HDR_6bpp,
+        PVRTCII_HDR_8bpp,
 
         // The memory layout for 10 and 12 bit YUV formats that are packed into a WORD (16 bits) is denoted by MSB or LSB:
         // MSB denotes that the sample is stored in the most significant <N> bits
@@ -317,80 +330,115 @@ namespace PVRTexLib
         // All YUV formats are little endian
 
         // Packed YUV formats
-        PVRTLPF_VYUA10MSB_444,
-        PVRTLPF_VYUA10LSB_444,
-        PVRTLPF_VYUA12MSB_444,
-        PVRTLPF_VYUA12LSB_444,
-        PVRTLPF_UYV10A2_444,    // Y410
-        PVRTLPF_UYVA16_444,     // Y416
-        PVRTLPF_YUYV16_422,     // Y216
-        PVRTLPF_UYVY16_422,
-        PVRTLPF_YUYV10MSB_422,  // Y210
-        PVRTLPF_YUYV10LSB_422,
-        PVRTLPF_UYVY10MSB_422,
-        PVRTLPF_UYVY10LSB_422,
-        PVRTLPF_YUYV12MSB_422,
-        PVRTLPF_YUYV12LSB_422,
-        PVRTLPF_UYVY12MSB_422,
-        PVRTLPF_UYVY12LSB_422,
+        VYUA10MSB_444,
+        VYUA10LSB_444,
+        VYUA12MSB_444,
+        VYUA12LSB_444,
+        /// <summary>
+        /// Y410
+        /// </summary>
+        UYV10A2_444,
+        /// <summary>
+        /// Y416
+        /// </summary>
+        UYVA16_444,
+        /// <summary>
+        /// Y216
+        /// </summary>
+        YUYV16_422,
+        UYVY16_422,
+        /// <summary>
+        /// Y210
+        /// </summary>
+        YUYV10MSB_422,
+        YUYV10LSB_422,
+        UYVY10MSB_422,
+        UYVY10LSB_422,
+        YUYV12MSB_422,
+        YUYV12LSB_422,
+        UYVY12MSB_422,
+        UYVY12LSB_422,
 
         /*
             Reserved for future expansion
         */
 
         // 3 Plane (Planar) YUV formats
-        PVRTLPF_YUV_3P_444 = 270,
-        PVRTLPF_YUV10MSB_3P_444,
-        PVRTLPF_YUV10LSB_3P_444,
-        PVRTLPF_YUV12MSB_3P_444,
-        PVRTLPF_YUV12LSB_3P_444,
-        PVRTLPF_YUV16_3P_444,
-        PVRTLPF_YUV_3P_422,
-        PVRTLPF_YUV10MSB_3P_422,
-        PVRTLPF_YUV10LSB_3P_422,
-        PVRTLPF_YUV12MSB_3P_422,
-        PVRTLPF_YUV12LSB_3P_422,
-        PVRTLPF_YUV16_3P_422,
-        PVRTLPF_YUV_3P_420,
-        PVRTLPF_YUV10MSB_3P_420,
-        PVRTLPF_YUV10LSB_3P_420,
-        PVRTLPF_YUV12MSB_3P_420,
-        PVRTLPF_YUV12LSB_3P_420,
-        PVRTLPF_YUV16_3P_420,
-        PVRTLPF_YVU_3P_420,
+        YUV_3P_444 = 270,
+        YUV10MSB_3P_444,
+        YUV10LSB_3P_444,
+        YUV12MSB_3P_444,
+        YUV12LSB_3P_444,
+        YUV16_3P_444,
+        YUV_3P_422,
+        YUV10MSB_3P_422,
+        YUV10LSB_3P_422,
+        YUV12MSB_3P_422,
+        YUV12LSB_3P_422,
+        YUV16_3P_422,
+        YUV_3P_420,
+        YUV10MSB_3P_420,
+        YUV10LSB_3P_420,
+        YUV12MSB_3P_420,
+        YUV12LSB_3P_420,
+        YUV16_3P_420,
+        YVU_3P_420,
 
         /*
             Reserved for future expansion
         */
 
         // 2 Plane (Biplanar/semi-planar) YUV formats
-        PVRTLPF_YUV_2P_422 = 480,   // P208
-        PVRTLPF_YUV10MSB_2P_422,    // P210
-        PVRTLPF_YUV10LSB_2P_422,
-        PVRTLPF_YUV12MSB_2P_422,
-        PVRTLPF_YUV12LSB_2P_422,
-        PVRTLPF_YUV16_2P_422,       // P216
-        PVRTLPF_YUV_2P_420,         // NV12
-        PVRTLPF_YUV10MSB_2P_420,    // P010
-        PVRTLPF_YUV10LSB_2P_420,
-        PVRTLPF_YUV12MSB_2P_420,
-        PVRTLPF_YUV12LSB_2P_420,
-        PVRTLPF_YUV16_2P_420,       // P016
-        PVRTLPF_YUV_2P_444,
-        PVRTLPF_YVU_2P_444,
-        PVRTLPF_YUV10MSB_2P_444,
-        PVRTLPF_YUV10LSB_2P_444,
-        PVRTLPF_YVU10MSB_2P_444,
-        PVRTLPF_YVU10LSB_2P_444,
-        PVRTLPF_YVU_2P_422,
-        PVRTLPF_YVU10MSB_2P_422,
-        PVRTLPF_YVU10LSB_2P_422,
-        PVRTLPF_YVU_2P_420,         // NV21
-        PVRTLPF_YVU10MSB_2P_420,
-        PVRTLPF_YVU10LSB_2P_420,
+        /// <summary>
+        /// P208
+        /// </summary>
+        YUV_2P_422 = 480,
+        /// <summary>
+        /// P210
+        /// </summary>
+        YUV10MSB_2P_422,
+        YUV10LSB_2P_422,
+        YUV12MSB_2P_422,
+        YUV12LSB_2P_422,
+        /// <summary>
+        /// P216
+        /// </summary>
+        YUV16_2P_422,
+        /// <summary>
+        /// NV12
+        /// </summary>
+        YUV_2P_420,
+        /// <summary>
+        /// P010
+        /// </summary>
+        YUV10MSB_2P_420,
+        YUV10LSB_2P_420,
+        YUV12MSB_2P_420,
+        YUV12LSB_2P_420,
+        /// <summary>
+        /// P016
+        /// </summary>
+        YUV16_2P_420,
+        YUV_2P_444,
+        YVU_2P_444,
+        YUV10MSB_2P_444,
+        YUV10LSB_2P_444,
+        YVU10MSB_2P_444,
+        YVU10LSB_2P_444,
+        YVU_2P_422,
+        YVU10MSB_2P_422,
+        YVU10LSB_2P_422,
+        /// <summary>
+        /// NV21
+        /// </summary>
+        YVU_2P_420,
+        YVU10MSB_2P_420,
+        YVU10LSB_2P_420,
 
-        //Invalid value
-        PVRTLPF_NumCompressedPFs
+        /// <summary>
+        /// Invalid value
+        /// </summary>
+        NumCompressedPFs
     }
 
     /// <summary>
@@ -400,24 +448,24 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibVariableType
     {
-        PVRTLVT_UnsignedByteNorm,
-        PVRTLVT_SignedByteNorm,
-        PVRTLVT_UnsignedByte,
-        PVRTLVT_SignedByte,
-        PVRTLVT_UnsignedShortNorm,
-        PVRTLVT_SignedShortNorm,
-        PVRTLVT_UnsignedShort,
-        PVRTLVT_SignedShort,
-        PVRTLVT_UnsignedIntegerNorm,
-        PVRTLVT_SignedIntegerNorm,
-        PVRTLVT_UnsignedInteger,
-        PVRTLVT_SignedInteger,
-        PVRTLVT_SignedFloat,
-        PVRTLVT_Float = PVRTLVT_SignedFloat, //the name Float is now deprecated.
-        PVRTLVT_UnsignedFloat,
-        PVRTLVT_NumVarTypes,
+        UnsignedByteNorm,
+        SignedByteNorm,
+        UnsignedByte,
+        SignedByte,
+        UnsignedShortNorm,
+        SignedShortNorm,
+        UnsignedShort,
+        SignedShort,
+        UnsignedIntegerNorm,
+        SignedIntegerNorm,
+        UnsignedInteger,
+        SignedInteger,
+        SignedFloat,
+        [Obsolete("the name Float is now deprecated. Use SignedFloat instead.")] Float = SignedFloat,
+        UnsignedFloat,
+        NumVarTypes,
 
-        PVRTLVT_Invalid = 255
+        Invalid = 255
     }
 
     /// <summary>
@@ -426,34 +474,109 @@ namespace PVRTexLib
     /// </summary>
     public enum PVRTexLibCompressorQuality
     {
-        PVRTLCQ_PVRTCFastest = 0,   //!< PVRTC fastest
-        PVRTLCQ_PVRTCFast,          //!< PVRTC fast
-        PVRTLCQ_PVRTCLow,           //!< PVRTC low
-        PVRTLCQ_PVRTCNormal,        //!< PVRTC normal
-        PVRTLCQ_PVRTCHigh,          //!< PVRTC high
-        PVRTLCQ_PVRTCVeryHigh,      //!< PVRTC very high
-        PVRTLCQ_PVRTCThorough,      //!< PVRTC thorough
-        PVRTLCQ_PVRTCBest,          //!< PVRTC best
-        PVRTLCQ_NumPVRTCModes,      //!< Number of PVRTC modes
+        /// <summary>
+        /// PVRTC fastest
+        /// </summary>
+        PVRTCFastest = 0,
+        /// <summary>
+        /// PVRTC fast
+        /// </summary>
+        PVRTCFast,
+        /// <summary>
+        /// PVRTC low
+        /// </summary>
+        PVRTCLow,
+        /// <summary>
+        /// PVRTC normal
+        /// </summary>
+        PVRTCNormal,
+        /// <summary>
+        /// PVRTC high
+        /// </summary>
+        PVRTCHigh,
+        /// <summary>
+        /// PVRTC very high
+        /// </summary>
+        PVRTCVeryHigh,
+        /// <summary>
+        /// PVRTC thorough
+        /// </summary>
+        PVRTCThorough,
+        /// <summary>
+        /// PVRTC best
+        /// </summary>
+        PVRTCBest,
+        /// <summary>
+        /// Number of PVRTC modes
+        /// </summary>
+        NumPVRTCModes,
 
-        PVRTLCQ_ETCFast = 0,        //!< ETC fast
-        PVRTLCQ_ETCNormal,          //!< ETC normal
-        PVRTLCQ_ETCSlow,            //!< ETC slow
-        PVRTLCQ_NumETCModes,        //!< Number of ETC modes
+        /// <summary>
+        /// ETC fast
+        /// </summary>
+        ETCFast = 0,
+        /// <summary>
+        /// ETC normal
+        /// </summary>
+        ETCNormal,
+        /// <summary>
+        /// ETC slow
+        /// </summary>
+        ETCSlow,
+        /// <summary>
+        /// Number of ETC modes
+        /// </summary>
+        NumETCModes,
 
-        PVRTLCQ_ASTCVeryFast = 0,   //!< ASTC very fast
-        PVRTLCQ_ASTCFast,           //!< ASTC fast
-        PVRTLCQ_ASTCMedium,         //!< ASTC medium
-        PVRTLCQ_ASTCThorough,       //!< ASTC thorough
-        PVRTLCQ_ASTCExhaustive,     //!< ASTC exhaustive
-        PVRTLCQ_NumASTCModes,       //!< Number of ASTC modes
+        /// <summary>
+        /// ASTC very fast
+        /// </summary>
+        ASTCVeryFast = 0,
+        /// <summary>
+        /// ASTC fast
+        /// </summary>
+        ASTCFast,
+        /// <summary>
+        /// ASTC medium
+        /// </summary>
+        ASTCMedium,
+        /// <summary>
+        /// ASTC thorough
+        /// </summary>
+        ASTCThorough,
+        /// <summary>
+        /// ASTC exhaustive
+        /// </summary>
+        ASTCExhaustive,
+        /// <summary>
+        /// Number of ASTC modes
+        /// </summary>
+        NumASTCModes,
 
-        PVRTLCQ_BASISULowest = 0,   //!< BASISU lowest quality
-        PVRTLCQ_BASISULow,          //!< BASISU low quality
-        PVRTLCQ_BASISUNormal,       //!< BASISU normal quality
-        PVRTLCQ_BASISUHigh,         //!< BASISU high quality
-        PVRTLCQ_BASISUBest,         //!< BASISU best quality
-        PVRTLCQ_NumBASISUModes,     //!< Number of BASISU modes
+        /// <summary>
+        /// BASISU lowest quality
+        /// </summary>
+        BASISULowest = 0,
+        /// <summary>
+        /// BASISU low quality
+        /// </summary>
+        BASISULow,
+        /// <summary>
+        /// BASISU normal quality
+        /// </summary>
+        BASISUNormal,
+        /// <summary>
+        /// BASISU high quality
+        /// </summary>
+        BASISUHigh,
+        /// <summary>
+        /// BASISU best quality
+        /// </summary>
+        BASISUBest,
+        /// <summary>
+        /// Number of BASISU modes
+        /// </summary>
+        NumBASISUModes
     }
 
     /// <summary>
@@ -464,51 +587,54 @@ namespace PVRTexLib
         /// <summary>
         /// Nearest filtering
         /// </summary>
-        PVRTLRM_Nearest,
+        Nearest,
         /// <summary>
         /// Linear filtering
         /// </summary>
-        PVRTLRM_Linear,
+        Linear,
         /// <summary>
         /// Cubic filtering, uses Catmull-Rom splines.
         /// </summary>
-        PVRTLRM_Cubic,
+        Cubic,
         /// <summary>
         /// Number of resize modes
         /// </summary>
-        PVRTLRM_Modes
+        Modes
     }
 
+    /// <summary>
+    /// File container type
+    /// </summary>
     public enum PVRTexLibFileContainerType
     {
         /// <summary>
         /// PVR: https://docs.imgtec.com/Specifications/PVR_File_Format_Specification/topics/pvr_intro.html
         /// </summary>
-        PVRTLFCT_PVR,
+        PVR,
         /// <summary>
         /// KTX version 1: https://www.khronos.org/registry/KTX/specs/1.0/ktxspec_v1.html
         /// </summary>
-        PVRTLFCT_KTX,
+        KTX,
         /// <summary>
         /// KTX version 2: https://github.khronos.org/KTX-Specification/
         /// </summary>
-        PVRTLFCT_KTX2,
+        KTX2,
         /// <summary>
         /// ASTC compressed textures only: https://github.com/ARM-software/astc-encoder
         /// </summary>
-        PVRTLFCT_ASTC,
+        ASTC,
         /// <summary>
         /// Basis Universal compressed textures only: https://github.com/BinomialLLC/basis_universal
         /// </summary>
-        PVRTLFCT_BASIS,
+        BASIS,
         /// <summary>
         /// DirectDraw Surface: https://docs.microsoft.com/en-us/windows/win32/direct3ddds/dx-graphics-dds-reference
         /// </summary>
-        PVRTLFCT_DDS,
+        DDS,
         /// <summary>
         /// C style header
         /// </summary>
-        PVRTLFCT_CHeader
+        CHeader
     }
 
     /// <summary>
@@ -519,11 +645,11 @@ namespace PVRTexLib
         /// <summary>
         /// Absolute
         /// </summary>
-        PVRTLCDM_Abs,
+        Abs,
         /// <summary>
         /// Signed
         /// </summary>
-        PVRTLCDM_Signed
+        Signed
     }
 
     /// <summary>
@@ -534,56 +660,94 @@ namespace PVRTexLib
         /// <summary>
         /// OpenGL ES 1.x
         /// </summary>
-        PVRTLLAPI_OGLES = 1,
+        OGLES = 1,
         /// <summary>
         /// OpenGL ES 2.0
         /// </summary>
-        PVRTLLAPI_OGLES2,
+        OGLES2,
         /// <summary>
         /// Direct 3D M
         /// </summary>
-        PVRTLLAPI_D3DM,
+        D3DM,
         /// <summary>
         /// Open GL
         /// </summary>
-        PVRTLLAPI_OGL,
+        OGL,
         /// <summary>
         /// DirextX 9
         /// </summary>
-        PVRTLLAPI_DX9,
+        DX9,
         /// <summary>
         /// DirectX 10
         /// </summary>
-        PVRTLLAPI_DX10,
+        DX10,
         /// <summary>
         /// Open VG
         /// </summary>
-        PVRTLLAPI_OVG,
+        OVG,
         /// <summary>
         /// MGL
         /// </summary>
-        PVRTLLAPI_MGL,
+        MGL
     }
 
     /// <summary>
-    /// <para>**************************************************************************</para>
-    /// <para>* Integer types</para>
-    /// <para>**************************************************************************</para>
+    /// A header for a PVR texture. Contains everything required to read
+    /// a texture accurately, and nothing more. Extraneous data is stored
+    /// in a MetaDataBlock. Correct use of the texture may rely on
+    /// MetaDataBlock, but accurate data loading can be done through the
+    /// standard header alone.
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct PVRTextureHeaderV3
     {
+        /// <summary>
+        /// Version of the file header, used to identify it.
+        /// </summary>
         public uint u32Version;
+        /// <summary>
+        /// Various format flags.
+        /// </summary>
         public uint u32Flags;
+        /// <summary>
+        /// The pixel format, 8cc value storing the 4 channel identifiers and their respective sizes.
+        /// </summary>
         public ulong u64PixelFormat;
+        /// <summary>
+        /// The Colour Space of the texture, currently either linear RGB or sRGB.
+        /// </summary>
         public uint u32ColourSpace;
+        /// <summary>
+        /// Variable type that the channel is stored in. Supports signed/unsigned int/short/byte or float for now.
+        /// </summary>
         public uint u32ChannelType;
+        /// <summary>
+        /// Height of the texture.
+        /// </summary>
         public uint u32Height;
+        /// <summary>
+        /// Width of the texture.
+        /// </summary>
         public uint u32Width;
+        /// <summary>
+        /// Depth of the texture. (Z-slices)
+        /// </summary>
         public uint u32Depth;
+        /// <summary>
+        /// Number of members in a Texture Array.
+        /// </summary>
         public uint u32NumSurfaces;
+        /// <summary>
+        /// Number of faces in a Cube Map. Maybe be a value other than 6.
+        /// </summary>
         public uint u32NumFaces;
+        /// <summary>
+        /// Number of MIP Maps in the texture - NB: Includes top level.
+        /// </summary>
         public uint u32MIPMapCount;
+        /// <summary>
+        /// Size of the accompanying meta data.
+        /// </summary>
         public uint u32MetaDataSize;
     }
 }

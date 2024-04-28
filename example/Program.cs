@@ -9,17 +9,17 @@ namespace Example
     {
         static void Main(string[] args)
         {
-            EncodeTexture("D:\\in.png", "D:\\out.bin", (ulong)PVRTexLibPixelFormat.PVRTLPF_PVRTCII_HDR_8bpp);
+            EncodeTexture("D:\\in.png", "D:\\out.bin", (ulong)PVRTexLibPixelFormat.PVRTCII_HDR_8bpp);
             DecodeTexture("D:\\out.bin", "D:\\in2.png");
         }
 
         static unsafe void Transcode(void* inData, void* outData, uint width, uint height, ulong inFormat, ulong outFormat, PVRTexLibCompressorQuality quality, bool dither)
         {
-            using PVRTextureHeader header = new PVRTextureHeader(inFormat, width, height, 1, 1, 1, 1, PVRTexLibColourSpace.PVRTLCS_sRGB, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, false);
+            using PVRTextureHeader header = new PVRTextureHeader(inFormat, width, height, 1, 1, 1, 1, PVRTexLibColourSpace.sRGB, PVRTexLibVariableType.UnsignedByteNorm, false);
             using PVRTexture tex = new PVRTexture(header, inData);
             if (tex.GetTextureDataSize() != 0)
             {
-                if (tex.Transcode(outFormat, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_sRGB, quality, dither))
+                if (tex.Transcode(outFormat, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.sRGB, quality, dither))
                 {
                     NativeMemory.Copy(tex.GetTextureDataPointer(0), outData, (nuint)tex.GetTextureDataSize(0));
                 }
@@ -31,13 +31,13 @@ namespace Example
             using (Bitmap bitmap = new Bitmap(Image.FromFile(inFile)))
             {
                 BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                using (PVRTextureHeader header = new PVRTextureHeader(PVRDefine.PVRTGENPIXELID4('b', 'g', 'r', 'a', 8, 8, 8, 8), (uint)bitmap.Width, (uint)bitmap.Height, 1, 1, 1, 1, PVRTexLibColourSpace.PVRTLCS_sRGB, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, false))
+                using (PVRTextureHeader header = new PVRTextureHeader(PVRDefine.PVRTGENPIXELID4('b', 'g', 'r', 'a', 8, 8, 8, 8), (uint)bitmap.Width, (uint)bitmap.Height, 1, 1, 1, 1, PVRTexLibColourSpace.sRGB, PVRTexLibVariableType.UnsignedByteNorm, false))
                 {
                     using (PVRTexture tex = new PVRTexture(header, (void*)data.Scan0))
                     {
                         if (tex.GetTextureDataSize() != 0)
                         {
-                            if (tex.Transcode(outFormat, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_sRGB, 0, false))
+                            if (tex.Transcode(outFormat, PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.sRGB, 0, false))
                             {
                                 using (Stream outStream = File.Create(outFile))
                                 {
@@ -78,7 +78,7 @@ namespace Example
             using (Bitmap bitmap = new Bitmap(width, height))
             {
                 BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                using (PVRTextureHeader header = new PVRTextureHeader(inFormat, (uint)width, (uint)height, 1, 1, 1, 1, PVRTexLibColourSpace.PVRTLCS_sRGB, PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, false))
+                using (PVRTextureHeader header = new PVRTextureHeader(inFormat, (uint)width, (uint)height, 1, 1, 1, 1, PVRTexLibColourSpace.sRGB, PVRTexLibVariableType.UnsignedByteNorm, false))
                 {
                     fixed (byte* rawTexDataPtr = &rawTexDataArray[0])
                     {
@@ -86,7 +86,7 @@ namespace Example
                         {
                             if (tex.GetTextureDataSize() != 0)
                             {
-                                if (tex.Transcode(PVRDefine.PVRTGENPIXELID4('b', 'g', 'r', 'a', 8, 8, 8, 8), PVRTexLibVariableType.PVRTLVT_UnsignedByteNorm, PVRTexLibColourSpace.PVRTLCS_sRGB, 0, false))
+                                if (tex.Transcode(PVRDefine.PVRTGENPIXELID4('b', 'g', 'r', 'a', 8, 8, 8, 8), PVRTexLibVariableType.UnsignedByteNorm, PVRTexLibColourSpace.sRGB, 0, false))
                                 {
                                     NativeMemory.Copy(tex.GetTextureDataPointer(0), (void*)data.Scan0, (nuint)tex.GetTextureDataSize(0));
                                 }
