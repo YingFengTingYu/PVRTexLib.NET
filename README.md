@@ -126,7 +126,7 @@ public static PVRTexture? ReadAndTranscodeImage(string filePath)
 ```
 ### Pre-processing a Texture
 In this example, a file is loaded, the pixel format is checked to determine if it is compressed or packed and transcoded to a usable format if required. The texture is then converted into a normal map of the same dimensions and a full MIP map chain is generated. Finally the texture is encoded into PVRTC1 four bits per pixel and saved to an output file.  
-The memory backing the data pointer returned from GetTextureDataPointer(бн) is tied to the lifetime of the PVRTexture object.
+The memory backing the data pointer returned from GetTextureDataPointer(...) is tied to the lifetime of the PVRTexture object.
 ```csharp
 public static bool ApplySomeProcessing(string inFilePath, string outFilePath)
 {
@@ -375,9 +375,9 @@ public static bool WriteMetaData(string inFilePath, string outFilePath)
 }
 ```
 ### Accessing Pixel Data Directly
-This example demonstrates how to use the GetTextureDataPointer(бн) API which allows for direct data access. First a file is loaded, the pixel format is checked to determine if it is compressed or packed and transcoded to a usable format if required. Then each surface (Mip level, array member, face and Z slice) of the texture is iterated over, for each surface every pixel is iterated over, this allows for access to every pixel in the entire texture, each pixel can then be modified by the user, if desired.  
+This example demonstrates how to use the GetTextureDataPointer(...) API which allows for direct data access. First a file is loaded, the pixel format is checked to determine if it is compressed or packed and transcoded to a usable format if required. Then each surface (Mip level, array member, face and Z slice) of the texture is iterated over, for each surface every pixel is iterated over, this allows for access to every pixel in the entire texture, each pixel can then be modified by the user, if desired.  
 The appropriate data type for accessing the pixel channel data can be determined via the GetTextureChannelType() API. The stride between each pixel can be calculated by querying the bits per pixel (via GetTextureBitsPerPixel() API) and diving by 8.  
-The memory backing the data pointer returned from GetTextureDataPointer(бн) is tied to the lifetime of the PVRTexture object.
+The memory backing the data pointer returned from GetTextureDataPointer(...) is tied to the lifetime of the PVRTexture object.
 ```csharp
 public static bool AccessingPixelDataDirectly(string inFilePath, string outFilePath)
 {
