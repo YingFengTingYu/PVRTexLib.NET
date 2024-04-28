@@ -34,13 +34,18 @@ namespace PVRTexLib
 
     public unsafe class PVRTextureHeader : IDisposable
     {
+        public delegate void GetMetaDataBlockFree(IntPtr blockData);
+        public delegate IntPtr GetMetaDataBlockRealloc(IntPtr blockData, IntPtr allocSize);
+
         protected void* m_hTextureHeader;
 #if NET6_0_OR_GREATER
         public static GetMetaDataBlockAllocCallback Alloc = bytes => (IntPtr)NativeMemory.Alloc(bytes);
-        public static Action<IntPtr> Free = ptr => NativeMemory.Free((void*)ptr);
+        public static GetMetaDataBlockFree Free = ptr => NativeMemory.Free((void*)ptr);
+        public static GetMetaDataBlockRealloc Realloc = (ptr, size) => (IntPtr)NativeMemory.Realloc((void*)ptr, (nuint)(nint)size);
 #else
         public static GetMetaDataBlockAllocCallback Alloc = bytes => Marshal.AllocHGlobal((int)bytes);
-        public static Action<IntPtr> Free = ptr => Marshal.FreeHGlobal(ptr);
+        public static GetMetaDataBlockFree Free = ptr => Marshal.FreeHGlobal(ptr);
+        public static GetMetaDataBlockRealloc Realloc = (ptr, size) => Marshal.ReAllocHGlobal(ptr, size);
 #endif
         public void* Header => m_hTextureHeader;
 
@@ -1056,7 +1061,61 @@ namespace PVRTexLib
             return false;
         }
 
-        // 还有两个SaveTextureToMemory没实现 懒了
+        public void* SaveTextureToMemory(PVRTexLibFileContainerType fileType, ulong* outSize)
+        {
+            void* result = null;
+            *outSize = 0u;
+            if (m_hTexture != null)
+            {
+                if (!PVRTexLib_SaveTextureToMemory(m_hTexture, fileType, &result, outSize, (privateData, allocSize) =>
+                {
+                    void** buffer = (void**)privateData;
+                    void* currentPtr = *buffer;
+                    void* newPtr = (void*)Realloc((IntPtr)currentPtr, (IntPtr)allocSize);
+                    if (newPtr == null)
+                    {
+                        Free((IntPtr)currentPtr);
+                    }
+                    *buffer = newPtr;
+                    return (IntPtr)(*buffer);
+                }))
+                {
+                    *outSize = 0u;
+                    result = null;
+                }
+            }
+            return result;
+        }
+
+        public void* SaveTextureToMemory(PVRTexLibFileContainerType fileType, out ulong outSize)
+        {
+            void* result = null;
+            outSize = 0u;
+            if (m_hTexture != null)
+            {
+                ulong oSize;
+                if (!PVRTexLib_SaveTextureToMemory(m_hTexture, fileType, &result, &oSize, (privateData, allocSize) =>
+                {
+                    void** buffer = (void**)privateData;
+                    void* currentPtr = *buffer;
+                    void* newPtr = (void*)Realloc((IntPtr)currentPtr, (IntPtr)allocSize);
+                    if (newPtr == null)
+                    {
+                        Free((IntPtr)currentPtr);
+                    }
+                    *buffer = newPtr;
+                    return (IntPtr)(*buffer);
+                }))
+                {
+                    result = null;
+                }
+                else
+                {
+                    outSize = oSize;
+                }
+            }
+            return result;
+        }
 
         public bool SaveToFile(string filePath, PVRTexLibLegacyApi api)
         {
