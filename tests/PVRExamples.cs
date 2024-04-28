@@ -1,9 +1,8 @@
-﻿using PVRTexLib;
-
-namespace PVRTexLib.Tests
+﻿namespace PVRTexLib.Tests
 {
     /// <summary>
     /// This section demonstrates a few of examples of using the PVRTexTool library with the required code shown.
+    /// https://docs.imgtec.com/tools-manuals/pvrtextool-manual/html/topics/library/pvrtexlib-examples.html#examples-of-using-the-pvrtextool-library
     /// </summary>
     public static class PVRExamples
     {
