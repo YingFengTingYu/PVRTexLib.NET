@@ -6,7 +6,10 @@ namespace PVRTexLib.Tests
         [OneTimeSetUp]
         public void Setup()
         {
-            Directory.Delete("images/generated", true);
+            if (Directory.Exists("images/generated"))
+            {
+                Directory.Delete("images/generated", true);
+            }
             Directory.CreateDirectory("images/generated");
         }
 
