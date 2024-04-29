@@ -50,6 +50,7 @@ namespace PVRTexLib
         /// <summary>
         /// has the RGB been pre-multiplied by the alpha?
         /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
         public bool preMultiplied;
     }
 
@@ -189,6 +190,7 @@ namespace PVRTexLib
         /// <summary>
         /// Apply dithering to lower precision formats.
         /// </summary>
+        [MarshalAs(UnmanagedType.I1)]
         public bool doDither;
         /// <summary>
         /// Max range value for RGB[M|D] encoding
@@ -326,743 +328,779 @@ namespace PVRTexLib
         }
 
 #if NET7_0_OR_GREATER
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetDefaultTextureHeaderParams")]
+        /// <summary>
+        /// Sets up default texture header parameters.
+        /// </summary>
+        /// <param name="result">Default header attributes.</param>
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetDefaultTextureHeaderParams")]
         public static partial void PVRTexLib_SetDefaultTextureHeaderParams(PVRHeader_CreateParams* result);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeader")]
+        /// <summary>
+        /// Creates a new texture header using the supplied
+        /// header parameters.
+        /// </summary>
+        /// <param name="attribs">The header attributes</param>
+        /// <returns>A handle to a new texture header.</returns>
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeader")]
         public static partial void* PVRTexLib_CreateTextureHeader(PVRHeader_CreateParams* attribs);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeaderFromHeader")]
+        /// <summary>
+        /// Creates a new texture header from a PVRV3 structure.
+        /// Optionally supply meta data.
+        /// </summary>
+        /// <param name="header">PVRTextureHeaderV3 structure to create from.</param>
+        /// <param name="metaDataCount">Number of items in metaData, can be 0.</param>
+        /// <param name="metaData">Array of meta data blocks, can be null.</param>
+        /// <returns>A handle to a new texture header.</returns>
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeaderFromHeader")]
         public static partial void* PVRTexLib_CreateTextureHeaderFromHeader(PVRTextureHeaderV3* header, uint metaDataCount, PVRTexLib_MetaDataBlock* metaData);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureHeader")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureHeader")]
         public static partial void* PVRTexLib_CopyTextureHeader(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTextureHeader")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTextureHeader")]
         public static partial void PVRTexLib_DestroyTextureHeader(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureCreateRaw")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureCreateRaw")]
         public static partial PVRTextureHeaderV3* PVRTexLib_TextureCreateRaw(uint width, uint height, uint depth, uint wMin, uint hMin, uint dMin, uint nBPP, [MarshalAs(UnmanagedType.I1)] bool bMIPMap, TextureCreateRawAllocCallback pfnAllocCallback);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureLoadTiled")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureLoadTiled")]
         public static partial void PVRTexLib_TextureLoadTiled(byte* pDst, uint widthDst, uint heightDst, byte* pSrc, uint widthSrc, uint heightSrc, uint elementSize, [MarshalAs(UnmanagedType.I1)] bool twiddled);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBitsPerPixel")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBitsPerPixel")]
         public static partial uint PVRTexLib_GetTextureBitsPerPixel(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetFormatBitsPerPixel")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetFormatBitsPerPixel")]
         public static partial uint PVRTexLib_GetFormatBitsPerPixel(ulong u64PixelFormat);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelCount")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelCount")]
         public static partial uint PVRTexLib_GetTextureChannelCount(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelType")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelType")]
         public static partial PVRTexLibVariableType PVRTexLib_GetTextureChannelType(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureColourSpace")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureColourSpace")]
         public static partial PVRTexLibColourSpace PVRTexLib_GetTextureColourSpace(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureWidth")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureWidth")]
         public static partial uint PVRTexLib_GetTextureWidth(void* header, uint mipLevel);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeight")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeight")]
         public static partial uint PVRTexLib_GetTextureHeight(void* header, uint mipLevel);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDepth")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDepth")]
         public static partial uint PVRTexLib_GetTextureDepth(void* header, uint mipLevel);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureSize")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureSize")]
         public static partial uint PVRTexLib_GetTextureSize(void* header, int mipLevel, [MarshalAs(UnmanagedType.I1)] bool allSurfaces, [MarshalAs(UnmanagedType.I1)] bool allFaces);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataSize")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataSize")]
         public static partial ulong PVRTexLib_GetTextureDataSize(void* header, int mipLevel, [MarshalAs(UnmanagedType.I1)] bool allSurfaces, [MarshalAs(UnmanagedType.I1)] bool allFaces);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOrientation")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOrientation")]
         public static partial void PVRTexLib_GetTextureOrientation(void* header, PVRTexLib_Orientation* result);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLFormat")]
         public static partial void PVRTexLib_GetTextureOpenGLFormat(void* header, PVRTexLib_OpenGLFormat* result);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLESFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLESFormat")]
         public static partial void PVRTexLib_GetTextureOpenGLESFormat(void* header, PVRTexLib_OpenGLFormat* result);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureVulkanFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureVulkanFormat")]
         public static partial uint PVRTexLib_GetTextureVulkanFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureD3DFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureD3DFormat")]
         public static partial uint PVRTexLib_GetTextureD3DFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDXGIFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDXGIFormat")]
         public static partial uint PVRTexLib_GetTextureDXGIFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureFormatMinDims")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureFormatMinDims")]
         public static partial void PVRTexLib_GetTextureFormatMinDims(void* header, uint* minX, uint* minY, uint* minZ);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetPixelFormatMinDims")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetPixelFormatMinDims")]
         public static partial void PVRTexLib_GetPixelFormatMinDims(ulong ui64Format, uint* minX, uint* minY, uint* minZ);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureMetaDataSize")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureMetaDataSize")]
         public static partial uint PVRTexLib_GetTextureMetaDataSize(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsPreMultiplied")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsPreMultiplied")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GetTextureIsPreMultiplied(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsFileCompressed")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsFileCompressed")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GetTextureIsFileCompressed(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsBumpMap")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsBumpMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GetTextureIsBumpMap(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapScale")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapScale")]
         public static partial float PVRTexLib_GetTextureBumpMapScale(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetNumTextureAtlasMembers")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetNumTextureAtlasMembers")]
         public static partial uint PVRTexLib_GetNumTextureAtlasMembers(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureAtlasData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureAtlasData")]
         public static partial float* PVRTexLib_GetTextureAtlasData(void* header, uint* count);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumMipMapLevels")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumMipMapLevels")]
         public static partial uint PVRTexLib_GetTextureNumMipMapLevels(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumFaces")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumFaces")]
         public static partial uint PVRTexLib_GetTextureNumFaces(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumArrayMembers")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumArrayMembers")]
         public static partial uint PVRTexLib_GetTextureNumArrayMembers(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureCubeMapOrder")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureCubeMapOrder")]
         private static partial void PVRTexLib_GetTextureCubeMapOrder_Internal(void* header, sbyte* cubeOrder);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapOrder")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapOrder")]
         private static partial void PVRTexLib_GetTextureBumpMapOrder_Internal(void* header, sbyte* bumpOrder);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTexturePixelFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTexturePixelFormat")]
         public static partial ulong PVRTexLib_GetTexturePixelFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasPackedChannelData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasPackedChannelData")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_TextureHasPackedChannelData(void* header);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelType")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelType")]
         public static partial void PVRTexLib_SetTextureChannelType(void* header, PVRTexLibVariableType type);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureColourSpace")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureColourSpace")]
         public static partial void PVRTexLib_SetTextureColourSpace(void* header, PVRTexLibColourSpace colourSpace);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureD3DFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureD3DFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureD3DFormat(void* header, uint d3dFormat);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDXGIFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDXGIFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureDXGIFormat(void* header, uint dxgiFormat);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureOGLFormat(void* header, PVRTexLib_OpenGLFormat* oglFormat);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLESFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLESFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureOGLESFormat(void* header, PVRTexLib_OpenGLFormat* oglesFormat);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureVulkanFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureVulkanFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureVulkanFormat(void* header, uint vulkanFormat);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTexturePixelFormat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTexturePixelFormat")]
         public static partial void PVRTexLib_SetTexturePixelFormat(void* header, ulong format);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureWidth")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureWidth")]
         public static partial void PVRTexLib_SetTextureWidth(void* header, uint width);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureHeight")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureHeight")]
         public static partial void PVRTexLib_SetTextureHeight(void* header, uint height);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDepth")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDepth")]
         public static partial void PVRTexLib_SetTextureDepth(void* header, uint depth);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumArrayMembers")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumArrayMembers")]
         public static partial void PVRTexLib_SetTextureNumArrayMembers(void* header, uint numMembers);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumMIPLevels")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumMIPLevels")]
         public static partial void PVRTexLib_SetTextureNumMIPLevels(void* header, uint numMIPLevels);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumFaces")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumFaces")]
         public static partial void PVRTexLib_SetTextureNumFaces(void* header, uint numFaces);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOrientation")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOrientation")]
         public static partial void PVRTexLib_SetTextureOrientation(void* header, PVRTexLib_Orientation* orientation);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsFileCompressed")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsFileCompressed")]
         public static partial void PVRTexLib_SetTextureIsFileCompressed(void* header, [MarshalAs(UnmanagedType.I1)] bool isFileCompressed);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsPreMultiplied")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsPreMultiplied")]
         public static partial void PVRTexLib_SetTextureIsPreMultiplied(void* header, [MarshalAs(UnmanagedType.I1)] bool isPreMultiplied);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBorder")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBorder")]
         public static partial void PVRTexLib_GetTextureBorder(void* header, uint* borderWidth, uint* borderHeight, uint* borderDepth);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetMetaDataBlock")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetMetaDataBlock")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GetMetaDataBlock(void* header, uint devFOURCC, uint key, PVRTexLib_MetaDataBlock* dataBlock, GetMetaDataBlockAllocCallback pfnAllocCallback);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasMetaData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasMetaData")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_TextureHasMetaData(void* header, uint devFOURCC, uint key);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBumpMap")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBumpMap")]
         public static partial void PVRTexLib_SetTextureBumpMap(void* header, float bumpScale, [MarshalAs(UnmanagedType.LPStr)] string bumpOrder);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureAtlas")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureAtlas")]
         public static partial void PVRTexLib_SetTextureAtlas(void* header, float* atlasData, uint dataSize);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureCubeMapOrder")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureCubeMapOrder")]
         public static partial void PVRTexLib_SetTextureCubeMapOrder(void* header, [MarshalAs(UnmanagedType.LPStr)] string cubeMapOrder);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBorder")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBorder")]
         public static partial void PVRTexLib_SetTextureBorder(void* header, uint borderWidth, uint borderHeight, uint borderDepth);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddMetaData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddMetaData")]
         public static partial void PVRTexLib_AddMetaData(void* header, PVRTexLib_MetaDataBlock* dataBlock);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_RemoveMetaData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_RemoveMetaData")]
         public static partial void PVRTexLib_RemoveMetaData(void* header, uint devFOURCC, uint key);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTexture")]
         public static partial void* PVRTexLib_CreateTexture(void* header, void* data);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTexture")]
         public static partial void* PVRTexLib_CopyTexture(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MoveTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MoveTexture")]
         public static partial void* PVRTexLib_MoveTexture(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTexture")]
         public static partial void PVRTexLib_DestroyTexture(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromFile")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromFile")]
         public static partial void* PVRTexLib_CreateTextureFromFile([MarshalAs(UnmanagedType.LPStr)] string filePath);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromData")]
         public static partial void* PVRTexLib_CreateTextureFromData(void* data);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataPtr")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataPtr")]
         public static partial void* PVRTexLib_GetTextureDataPtr(void* texture, uint MIPLevel, uint arrayMember, uint faceNumber, uint ZSlice);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataConstPtr")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataConstPtr")]
         public static partial void* PVRTexLib_GetTextureDataConstPtr(void* texture, uint MIPLevel, uint arrayMember, uint faceNumber, uint ZSlice);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeader")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeader")]
         public static partial void* PVRTexLib_GetTextureHeader(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeaderW")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeaderW")]
         public static partial void* PVRTexLib_GetTextureHeaderW(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddPaddingMetaData")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddPaddingMetaData")]
         public static partial void PVRTexLib_AddPaddingMetaData(void* texture, uint padding);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToFile")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToFile")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SaveTextureToFile(void* texture, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToMemory")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToMemory")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SaveTextureToMemory(void* texture, PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, SaveTextureToMemoryRealloc pfnRealloc);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveSurfaceToImageFile")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveSurfaceToImageFile")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SaveSurfaceToImageFile(void* texture, [MarshalAs(UnmanagedType.LPStr)] string filePath, uint MIPLevel, uint arrayMember, uint face, uint ZSlice);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToLegacyPVRFile")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToLegacyPVRFile")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SaveTextureToLegacyPVRFile(void* texture, [MarshalAs(UnmanagedType.LPStr)] string filePath, PVRTexLibLegacyApi api);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_IsTextureMultiPart")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_IsTextureMultiPart")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_IsTextureMultiPart(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureParts")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureParts")]
         public static partial void PVRTexLib_GetTextureParts(void* inTexture, void** outTextures, uint* count);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_ResizeTexture(void* texture, uint newWidth, uint newHeight, uint newDepth, PVRTexLibResizeMode resizeMode);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTextureCanvas")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTextureCanvas")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_ResizeTextureCanvas(void* texture, uint newWidth, uint newHeight, uint newDepth, int xOffset, int yOffset, int zOffset);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_RotateTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_RotateTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_RotateTexture(void* texture, PVRTexLibAxis rotationAxis, [MarshalAs(UnmanagedType.I1)] bool forward);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_FlipTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_FlipTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_FlipTexture(void* texture, PVRTexLibAxis flipDirection);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_BorderTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_BorderTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_BorderTexture(void* texture, uint borderX, uint borderY, uint borderZ);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_PreMultiplyAlpha")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_PreMultiplyAlpha")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_PreMultiplyAlpha(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_Bleed")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_Bleed")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_Bleed(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannels")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannels")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureChannels(void* texture, uint numChannelSets, PVRTexLibChannelName* channels, uint* pValues);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelsFloat")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelsFloat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_SetTextureChannelsFloat(void* texture, uint numChannelSets, PVRTexLibChannelName* channels, float* pValues);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureChannels")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureChannels")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_CopyTextureChannels(void* textureDestination, void* textureSource, uint numChannelCopies, PVRTexLibChannelName* destinationChannels, PVRTexLibChannelName* sourceChannels);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateNormalMap")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateNormalMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GenerateNormalMap(void* texture, float fScale, [MarshalAs(UnmanagedType.LPStr)] string channelOrder);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateMIPMaps")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateMIPMaps")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GenerateMIPMaps(void* texture, PVRTexLibResizeMode filterMode, int mipMapsToDo);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourMIPMaps")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourMIPMaps")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_ColourMIPMaps(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TranscodeTexture")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_TranscodeTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_TranscodeTexture(void* texture, PVRTexLib_TranscoderOptions* transcoderOptions);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_Decompress")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_Decompress")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_Decompress(void* texture, uint maxThreads);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_EquiRectToCubeMap")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_EquiRectToCubeMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_EquiRectToCubeMap(void* texture, PVRTexLibResizeMode filter);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateDiffuseIrradianceCubeMap")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateDiffuseIrradianceCubeMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GenerateDiffuseIrradianceCubeMap(void* texture, uint sampleCount, uint mapSize);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GeneratePreFilteredSpecularCubeMap")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_GeneratePreFilteredSpecularCubeMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_GeneratePreFilteredSpecularCubeMap(void* texture, uint sampleCount, uint mapSize, uint numMipLevelsToDiscard, [MarshalAs(UnmanagedType.I1)] bool zeroRoughnessIspartialal);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MaxDifference")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MaxDifference")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_MaxDifference(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanError")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanError")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_MeanError(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanSquaredError")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanSquaredError")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_MeanSquaredError(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_RootMeanSquaredError")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_RootMeanSquaredError")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_RootMeanSquaredError(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_StandardDeviation")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_StandardDeviation")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_StandardDeviation(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_PeakSignalToNoiseRatio")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_PeakSignalToNoiseRatio")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_PeakSignalToNoiseRatio(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourDiff")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourDiff")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_ColourDiff(void* textureLHS, void* textureRHS, void** textureResult, float multiplier, PVRTexLibColourDiffMode mode);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ToleranceDiff")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_ToleranceDiff")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_ToleranceDiff(void* textureLHS, void* textureRHS, void** textureResult, float tolerance);
 
-        [SuppressUnmanagedCodeSecurity, LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_BlendDiff")]
+        [LibraryImport(PVRTexLibName, EntryPoint = "PVRTexLib_BlendDiff")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool PVRTexLib_BlendDiff(void* textureLHS, void* textureRHS, void** textureResult, float blendFactor);
 #else
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetDefaultTextureHeaderParams", CallingConvention = CallingConvention.Cdecl)]
+        /// <summary>
+        /// Sets up default texture header parameters.
+        /// </summary>
+        /// <param name="result">Default header attributes.</param>
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetDefaultTextureHeaderParams")]
         public static extern void PVRTexLib_SetDefaultTextureHeaderParams(PVRHeader_CreateParams* result);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeader", CallingConvention = CallingConvention.Cdecl)]
+        /// <summary>
+        /// Creates a new texture header using the supplied
+        /// header parameters.
+        /// </summary>
+        /// <param name="attribs">The header attributes</param>
+        /// <returns>A handle to a new texture header.</returns>
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeader")]
         public static extern void* PVRTexLib_CreateTextureHeader(PVRHeader_CreateParams* attribs);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeaderFromHeader", CallingConvention = CallingConvention.Cdecl)]
+        /// <summary>
+        /// Creates a new texture header from a PVRV3 structure.
+        /// Optionally supply meta data.
+        /// </summary>
+        /// <param name="header">PVRTextureHeaderV3 structure to create from.</param>
+        /// <param name="metaDataCount">Number of items in metaData, can be 0.</param>
+        /// <param name="metaData">Array of meta data blocks, can be null.</param>
+        /// <returns>A handle to a new texture header.</returns>
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureHeaderFromHeader")]
         public static extern void* PVRTexLib_CreateTextureHeaderFromHeader(PVRTextureHeaderV3* header, uint metaDataCount, PVRTexLib_MetaDataBlock* metaData);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureHeader", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureHeader")]
         public static extern void* PVRTexLib_CopyTextureHeader(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTextureHeader", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTextureHeader")]
         public static extern void PVRTexLib_DestroyTextureHeader(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureCreateRaw", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureCreateRaw")]
         public static extern PVRTextureHeaderV3* PVRTexLib_TextureCreateRaw(uint width, uint height, uint depth, uint wMin, uint hMin, uint dMin, uint nBPP, [MarshalAs(UnmanagedType.I1)] bool bMIPMap, TextureCreateRawAllocCallback pfnAllocCallback);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureLoadTiled", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureLoadTiled")]
         public static extern void PVRTexLib_TextureLoadTiled(byte* pDst, uint widthDst, uint heightDst, byte* pSrc, uint widthSrc, uint heightSrc, uint elementSize, [MarshalAs(UnmanagedType.I1)] bool twiddled);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBitsPerPixel", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBitsPerPixel")]
         public static extern uint PVRTexLib_GetTextureBitsPerPixel(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetFormatBitsPerPixel", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetFormatBitsPerPixel")]
         public static extern uint PVRTexLib_GetFormatBitsPerPixel(ulong u64PixelFormat);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelCount", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelCount")]
         public static extern uint PVRTexLib_GetTextureChannelCount(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelType", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureChannelType")]
         public static extern PVRTexLibVariableType PVRTexLib_GetTextureChannelType(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureColourSpace", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureColourSpace")]
         public static extern PVRTexLibColourSpace PVRTexLib_GetTextureColourSpace(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureWidth", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureWidth")]
         public static extern uint PVRTexLib_GetTextureWidth(void* header, uint mipLevel);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeight", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeight")]
         public static extern uint PVRTexLib_GetTextureHeight(void* header, uint mipLevel);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDepth", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDepth")]
         public static extern uint PVRTexLib_GetTextureDepth(void* header, uint mipLevel);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureSize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureSize")]
         public static extern uint PVRTexLib_GetTextureSize(void* header, int mipLevel, [MarshalAs(UnmanagedType.I1)] bool allSurfaces, [MarshalAs(UnmanagedType.I1)] bool allFaces);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataSize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataSize")]
         public static extern ulong PVRTexLib_GetTextureDataSize(void* header, int mipLevel, [MarshalAs(UnmanagedType.I1)] bool allSurfaces, [MarshalAs(UnmanagedType.I1)] bool allFaces);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOrientation", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOrientation")]
         public static extern void PVRTexLib_GetTextureOrientation(void* header, PVRTexLib_Orientation* result);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLFormat")]
         public static extern void PVRTexLib_GetTextureOpenGLFormat(void* header, PVRTexLib_OpenGLFormat* result);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLESFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureOpenGLESFormat")]
         public static extern void PVRTexLib_GetTextureOpenGLESFormat(void* header, PVRTexLib_OpenGLFormat* result);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureVulkanFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureVulkanFormat")]
         public static extern uint PVRTexLib_GetTextureVulkanFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureD3DFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureD3DFormat")]
         public static extern uint PVRTexLib_GetTextureD3DFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDXGIFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDXGIFormat")]
         public static extern uint PVRTexLib_GetTextureDXGIFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureFormatMinDims", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureFormatMinDims")]
         public static extern void PVRTexLib_GetTextureFormatMinDims(void* header, uint* minX, uint* minY, uint* minZ);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetPixelFormatMinDims", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetPixelFormatMinDims")]
         public static extern void PVRTexLib_GetPixelFormatMinDims(ulong ui64Format, uint* minX, uint* minY, uint* minZ);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureMetaDataSize", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureMetaDataSize")]
         public static extern uint PVRTexLib_GetTextureMetaDataSize(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsPreMultiplied", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsPreMultiplied")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GetTextureIsPreMultiplied(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsFileCompressed", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsFileCompressed")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GetTextureIsFileCompressed(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsBumpMap", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureIsBumpMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GetTextureIsBumpMap(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapScale", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapScale")]
         public static extern float PVRTexLib_GetTextureBumpMapScale(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetNumTextureAtlasMembers", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetNumTextureAtlasMembers")]
         public static extern uint PVRTexLib_GetNumTextureAtlasMembers(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureAtlasData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureAtlasData")]
         public static extern float* PVRTexLib_GetTextureAtlasData(void* header, uint* count);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumMipMapLevels", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumMipMapLevels")]
         public static extern uint PVRTexLib_GetTextureNumMipMapLevels(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumFaces", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumFaces")]
         public static extern uint PVRTexLib_GetTextureNumFaces(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumArrayMembers", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureNumArrayMembers")]
         public static extern uint PVRTexLib_GetTextureNumArrayMembers(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureCubeMapOrder", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureCubeMapOrder")]
         private static extern void PVRTexLib_GetTextureCubeMapOrder_Internal(void* header, sbyte* cubeOrder);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapOrder", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBumpMapOrder")]
         private static extern void PVRTexLib_GetTextureBumpMapOrder_Internal(void* header, sbyte* bumpOrder);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTexturePixelFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTexturePixelFormat")]
         public static extern ulong PVRTexLib_GetTexturePixelFormat(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasPackedChannelData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasPackedChannelData")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_TextureHasPackedChannelData(void* header);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelType", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelType")]
         public static extern void PVRTexLib_SetTextureChannelType(void* header, PVRTexLibVariableType type);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureColourSpace", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureColourSpace")]
         public static extern void PVRTexLib_SetTextureColourSpace(void* header, PVRTexLibColourSpace colourSpace);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureD3DFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureD3DFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureD3DFormat(void* header, uint d3dFormat);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDXGIFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDXGIFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureDXGIFormat(void* header, uint dxgiFormat);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureOGLFormat(void* header, PVRTexLib_OpenGLFormat* oglFormat);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLESFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOGLESFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureOGLESFormat(void* header, PVRTexLib_OpenGLFormat* oglesFormat);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureVulkanFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureVulkanFormat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureVulkanFormat(void* header, uint vulkanFormat);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTexturePixelFormat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTexturePixelFormat")]
         public static extern void PVRTexLib_SetTexturePixelFormat(void* header, ulong format);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureWidth", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureWidth")]
         public static extern void PVRTexLib_SetTextureWidth(void* header, uint width);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureHeight", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureHeight")]
         public static extern void PVRTexLib_SetTextureHeight(void* header, uint height);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDepth", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureDepth")]
         public static extern void PVRTexLib_SetTextureDepth(void* header, uint depth);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumArrayMembers", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumArrayMembers")]
         public static extern void PVRTexLib_SetTextureNumArrayMembers(void* header, uint numMembers);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumMIPLevels", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumMIPLevels")]
         public static extern void PVRTexLib_SetTextureNumMIPLevels(void* header, uint numMIPLevels);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumFaces", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureNumFaces")]
         public static extern void PVRTexLib_SetTextureNumFaces(void* header, uint numFaces);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOrientation", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureOrientation")]
         public static extern void PVRTexLib_SetTextureOrientation(void* header, PVRTexLib_Orientation* orientation);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsFileCompressed", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsFileCompressed")]
         public static extern void PVRTexLib_SetTextureIsFileCompressed(void* header, [MarshalAs(UnmanagedType.I1)] bool isFileCompressed);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsPreMultiplied", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureIsPreMultiplied")]
         public static extern void PVRTexLib_SetTextureIsPreMultiplied(void* header, [MarshalAs(UnmanagedType.I1)] bool isPreMultiplied);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBorder", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureBorder")]
         public static extern void PVRTexLib_GetTextureBorder(void* header, uint* borderWidth, uint* borderHeight, uint* borderDepth);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetMetaDataBlock", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetMetaDataBlock")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GetMetaDataBlock(void* header, uint devFOURCC, uint key, PVRTexLib_MetaDataBlock* dataBlock, GetMetaDataBlockAllocCallback pfnAllocCallback);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasMetaData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TextureHasMetaData")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_TextureHasMetaData(void* header, uint devFOURCC, uint key);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBumpMap", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBumpMap")]
         public static extern void PVRTexLib_SetTextureBumpMap(void* header, float bumpScale, [MarshalAs(UnmanagedType.LPStr)] string bumpOrder);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureAtlas", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureAtlas")]
         public static extern void PVRTexLib_SetTextureAtlas(void* header, float* atlasData, uint dataSize);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureCubeMapOrder", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureCubeMapOrder")]
         public static extern void PVRTexLib_SetTextureCubeMapOrder(void* header, [MarshalAs(UnmanagedType.LPStr)] string cubeMapOrder);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBorder", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureBorder")]
         public static extern void PVRTexLib_SetTextureBorder(void* header, uint borderWidth, uint borderHeight, uint borderDepth);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddMetaData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddMetaData")]
         public static extern void PVRTexLib_AddMetaData(void* header, PVRTexLib_MetaDataBlock* dataBlock);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_RemoveMetaData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_RemoveMetaData")]
         public static extern void PVRTexLib_RemoveMetaData(void* header, uint devFOURCC, uint key);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTexture")]
         public static extern void* PVRTexLib_CreateTexture(void* header, void* data);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTexture")]
         public static extern void* PVRTexLib_CopyTexture(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MoveTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MoveTexture")]
         public static extern void* PVRTexLib_MoveTexture(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_DestroyTexture")]
         public static extern void PVRTexLib_DestroyTexture(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromFile", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromFile")]
         public static extern void* PVRTexLib_CreateTextureFromFile([MarshalAs(UnmanagedType.LPStr)] string filePath);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CreateTextureFromData")]
         public static extern void* PVRTexLib_CreateTextureFromData(void* data);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataPtr", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataPtr")]
         public static extern void* PVRTexLib_GetTextureDataPtr(void* texture, uint MIPLevel, uint arrayMember, uint faceNumber, uint ZSlice);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataConstPtr", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureDataConstPtr")]
         public static extern void* PVRTexLib_GetTextureDataConstPtr(void* texture, uint MIPLevel, uint arrayMember, uint faceNumber, uint ZSlice);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeader", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeader")]
         public static extern void* PVRTexLib_GetTextureHeader(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeaderW", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureHeaderW")]
         public static extern void* PVRTexLib_GetTextureHeaderW(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddPaddingMetaData", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_AddPaddingMetaData")]
         public static extern void PVRTexLib_AddPaddingMetaData(void* texture, uint padding);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToFile", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToFile")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SaveTextureToFile(void* texture, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToMemory", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToMemory")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SaveTextureToMemory(void* texture, PVRTexLibFileContainerType fileType, void* privateData, ulong* outSize, SaveTextureToMemoryRealloc pfnRealloc);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveSurfaceToImageFile", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveSurfaceToImageFile")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SaveSurfaceToImageFile(void* texture, [MarshalAs(UnmanagedType.LPStr)] string filePath, uint MIPLevel, uint arrayMember, uint face, uint ZSlice);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToLegacyPVRFile", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SaveTextureToLegacyPVRFile")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SaveTextureToLegacyPVRFile(void* texture, [MarshalAs(UnmanagedType.LPStr)] string filePath, PVRTexLibLegacyApi api);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_IsTextureMultiPart", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_IsTextureMultiPart")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_IsTextureMultiPart(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureParts", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GetTextureParts")]
         public static extern void PVRTexLib_GetTextureParts(void* inTexture, void** outTextures, uint* count);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_ResizeTexture(void* texture, uint newWidth, uint newHeight, uint newDepth, PVRTexLibResizeMode resizeMode);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTextureCanvas", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ResizeTextureCanvas")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_ResizeTextureCanvas(void* texture, uint newWidth, uint newHeight, uint newDepth, int xOffset, int yOffset, int zOffset);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_RotateTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_RotateTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_RotateTexture(void* texture, PVRTexLibAxis rotationAxis, [MarshalAs(UnmanagedType.I1)] bool forward);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_FlipTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_FlipTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_FlipTexture(void* texture, PVRTexLibAxis flipDirection);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_BorderTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_BorderTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_BorderTexture(void* texture, uint borderX, uint borderY, uint borderZ);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_PreMultiplyAlpha", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_PreMultiplyAlpha")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_PreMultiplyAlpha(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_Bleed", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_Bleed")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_Bleed(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannels", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannels")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureChannels(void* texture, uint numChannelSets, PVRTexLibChannelName* channels, uint* pValues);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelsFloat", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_SetTextureChannelsFloat")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_SetTextureChannelsFloat(void* texture, uint numChannelSets, PVRTexLibChannelName* channels, float* pValues);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureChannels", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_CopyTextureChannels")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_CopyTextureChannels(void* textureDestination, void* textureSource, uint numChannelCopies, PVRTexLibChannelName* destinationChannels, PVRTexLibChannelName* sourceChannels);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateNormalMap", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateNormalMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GenerateNormalMap(void* texture, float fScale, [MarshalAs(UnmanagedType.LPStr)] string channelOrder);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateMIPMaps", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateMIPMaps")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GenerateMIPMaps(void* texture, PVRTexLibResizeMode filterMode, int mipMapsToDo);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourMIPMaps", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourMIPMaps")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_ColourMIPMaps(void* texture);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TranscodeTexture", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_TranscodeTexture")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_TranscodeTexture(void* texture, PVRTexLib_TranscoderOptions* transcoderOptions);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_Decompress", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_Decompress")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_Decompress(void* texture, uint maxThreads);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_EquiRectToCubeMap", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_EquiRectToCubeMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_EquiRectToCubeMap(void* texture, PVRTexLibResizeMode filter);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateDiffuseIrradianceCubeMap", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GenerateDiffuseIrradianceCubeMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GenerateDiffuseIrradianceCubeMap(void* texture, uint sampleCount, uint mapSize);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GeneratePreFilteredSpecularCubeMap", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_GeneratePreFilteredSpecularCubeMap")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_GeneratePreFilteredSpecularCubeMap(void* texture, uint sampleCount, uint mapSize, uint numMipLevelsToDiscard, [MarshalAs(UnmanagedType.I1)] bool zeroRoughnessIsExternal);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MaxDifference", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MaxDifference")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_MaxDifference(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanError", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanError")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_MeanError(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanSquaredError", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_MeanSquaredError")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_MeanSquaredError(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_RootMeanSquaredError", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_RootMeanSquaredError")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_RootMeanSquaredError(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_StandardDeviation", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_StandardDeviation")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_StandardDeviation(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_PeakSignalToNoiseRatio", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_PeakSignalToNoiseRatio")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_PeakSignalToNoiseRatio(void* textureLHS, void* textureRHS, uint MIPLevel, uint arrayMember, uint face, uint zSlice, PVRTexLib_ErrorMetrics* metrics);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourDiff", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ColourDiff")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_ColourDiff(void* textureLHS, void* textureRHS, void** textureResult, float multiplier, PVRTexLibColourDiffMode mode);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ToleranceDiff", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_ToleranceDiff")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_ToleranceDiff(void* textureLHS, void* textureRHS, void** textureResult, float tolerance);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_BlendDiff", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(PVRTexLibName, EntryPoint = "PVRTexLib_BlendDiff")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool PVRTexLib_BlendDiff(void* textureLHS, void* textureRHS, void** textureResult, float blendFactor);
 #endif
