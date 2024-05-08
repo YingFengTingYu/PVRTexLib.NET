@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net8.0;</TargetFrameworks>
+    <TargetFrameworks>net35;net40;net462;netstandard1.1;netstandard2.0;netstandard2.1;net6.0;net8.0;</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>PVRTexLib.NET</PackageId>
     <Title>PVRTexLib.NET</Title>
     <Company>$(AssemblyName)</Company>
     <Authors>YingFengTingYu</Authors>
-    <Description>PVRTexLib.NET is a wrapper for PVRTexLib supporting .NET Standard 2.0 and upper. It contains all the API from PVRTexLib.
+    <Description>PVRTexLib.NET is a wrapper for PVRTexLib supporting .NET Framework 3.5, .NET Standard 1.1 and upper. It contains all the API from PVRTexLib.
 The documents can be found through installing PVRTexTool.
 PVRTexLib.NET is licensed under the MIT license.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -16,15 +16,16 @@ PVRTexLib.NET is licensed under the MIT license.</Description>
     <PackageTags>pvr;pvrtc;astc;etc;texture;compress;dxt;pvrtexlib</PackageTags>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://www.nuget.org/packages/PVRTexLib.NET/</PackageProjectUrl>
-	<PackageReleaseNotes>1.修复回调函数报错问题
-2.将枚举名称改为C#命名样式
-3.在.NET 8.0使用LibraryImport特性</PackageReleaseNotes>
-	<AssemblyVersion>1.0.2</AssemblyVersion>
-	<FileVersion>1.0.2</FileVersion>
+	<PackageReleaseNotes>1.支持面向更早期的.NET版本为目标</PackageReleaseNotes>
+	<AssemblyVersion>1.0.3</AssemblyVersion>
+	<FileVersion>1.0.3</FileVersion>
 	<PackageIcon>icon.png</PackageIcon>
-	<Version>1.0.2</Version>
+	<Version>1.0.3</Version>
 	<GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<IsAotCompatible>True</IsAotCompatible>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
@@ -67,6 +68,16 @@ PVRTexLib.NET is licensed under the MIT license.</Description>
 		<PackagePath>runtimes\linux-arm64\native\%(Filename)%(Extension)</PackagePath>
 		<Pack>true</Pack>
 	</Content>
+	<Content Include="native\linux-riscv64\libPVRTexLib.so">
+		<PackagePath>runtimes\linux-riscv64\native\%(Filename)%(Extension)</PackagePath>
+		<Pack>true</Pack>
+	</Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.1'">
+    <PackageReference Include="System.Runtime.InteropServices">
+      <Version>4.3.0</Version>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

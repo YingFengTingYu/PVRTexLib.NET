@@ -79,7 +79,6 @@ namespace PVRTexLib
         /// <param name="C3Bits">channel3 bits</param>
         /// <param name="C4Bits">channel4 bits</param>
         /// <returns>format PixelID</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID4(ulong C1Name, ulong C2Name, ulong C3Name, ulong C4Name, ulong C1Bits, ulong C2Bits, ulong C3Bits, ulong C4Bits)
         {
             return C1Name + (C2Name << 8) + (C3Name << 16) + (C4Name << 24) + (C1Bits << 32) + (C2Bits << 40) + (C3Bits << 48) + (C4Bits << 56);
@@ -95,7 +94,6 @@ namespace PVRTexLib
         /// <param name="C2Bits">channel2 bits</param>
         /// <param name="C3Bits">channel3 bits</param>
         /// <returns>format PixelID</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID3(ulong C1Name, ulong C2Name, ulong C3Name, ulong C1Bits, ulong C2Bits, ulong C3Bits)
         {
             return PVRTGENPIXELID4(C1Name, C2Name, C3Name, 0, C1Bits, C2Bits, C3Bits, 0);
@@ -109,7 +107,6 @@ namespace PVRTexLib
         /// <param name="C1Bits">channel1 bits</param>
         /// <param name="C2Bits">channel2 bits</param>
         /// <returns>format PixelID</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID2(ulong C1Name, ulong C2Name, ulong C1Bits, ulong C2Bits)
         {
             return PVRTGENPIXELID4(C1Name, C2Name, 0, 0, C1Bits, C2Bits, 0, 0);
@@ -121,7 +118,6 @@ namespace PVRTexLib
         /// <param name="C1Name">channel1 name</param>
         /// <param name="C1Bits">channel1 bits</param>
         /// <returns>format PixelID</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong PVRTGENPIXELID1(ulong C1Name, ulong C1Bits)
         {
             return PVRTGENPIXELID4(C1Name, 0, 0, 0, C1Bits, 0, 0, 0);
@@ -134,7 +130,6 @@ namespace PVRTexLib
         /// <param name="y">y point</param>
         /// <param name="width">texture width</param>
         /// <returns>offset of the point</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TEXOFFSET2D(int x, int y, int width)
         {
             return x + y * width;
@@ -149,7 +144,6 @@ namespace PVRTexLib
         /// <param name="width">texture width</param>
         /// <param name="height">texture height</param>
         /// <returns>offset of the point</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int TEXOFFSET3D(int x, int y, int z, int width, int height)
         {
             return x + y * width + z * width * height;

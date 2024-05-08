@@ -1,9 +1,18 @@
 # PVRTexLib.NET
 ## Introduction
-PVRTexLib.NET is a wrapper for PVRTexLib supporting .NET Standard 2.0 and upper. It contains all the API from PVRTexLib.  
+PVRTexLib.NET is a wrapper for PVRTexLib supporting .NET Framework 3.5, .NET Standard 1.1 and upper. It contains all the API from PVRTexLib.  
 The documents can be found through installing PVRTexTool.
 ## License
 PVRTexLib.NET is licensed under the MIT license.
+## Supported Platforms
+PVRTexLib.NET try to support all the platforms which PVRTexLib is supporting.  
+For best compatibility, it is recommended that PVRTexTool is installed on machines running at least Windows 7, macOS 10.11 (El Capitan), or Ubuntu 16.04.
+### Windows
+x86 and x64
+### macOS
+x64 and arm64
+### Linux
+x86, x64, arm, arm64 and riscv64
 ## Quick Start
 Create PVRTexture instance to handle your textures.  
 

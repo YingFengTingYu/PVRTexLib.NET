@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using static PVRTexLib.PVRTexLibNative;
 using static PVRTexLib.PVRDefine;
 
@@ -360,6 +359,7 @@ namespace PVRTexLib
             }
         }
 
+#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         public (uint minX, uint minY, uint minZ) GetTextureFormatMinDims()
         {
             if (m_hTextureHeader != null)
@@ -373,6 +373,7 @@ namespace PVRTexLib
                 return (1U, 1U, 1U);
             }
         }
+#endif
 
         public void GetPixelFormatMinDims(ulong ui64Format, uint* minX, uint* minY, uint* minZ)
         {
@@ -388,12 +389,14 @@ namespace PVRTexLib
             minZ = aZ;
         }
 
+#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         public (uint minX, uint minY, uint minZ) GetPixelFormatMinDims(ulong ui64Format)
         {
             uint aX, aY, aZ;
             PVRTexLib_GetPixelFormatMinDims(ui64Format, &aX, &aY, &aZ);
             return (aX, aY, aZ);
         }
+#endif
 
         public uint GetTextureMetaDataSize()
         {
@@ -770,6 +773,7 @@ namespace PVRTexLib
             }
         }
 
+#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         public (uint borderWidth, uint borderHeight, uint borderDepth) GetTextureBorder()
         {
             if (m_hTextureHeader != null)
@@ -783,6 +787,7 @@ namespace PVRTexLib
                 return (0U, 0U, 0U);
             }
         }
+#endif
 
         public bool GetMetaDataBlock(uint key, PVRTexLib_MetaDataBlock* dataBlock, uint devFOURCC = PVRTEX_CURR_IDENT)
         {
